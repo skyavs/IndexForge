@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IndexForge - Build Financial Indices Without Code</title>
+<link rel="icon" type="image/png" href="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/1400095e3765872257f4b6eff389e667.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#2C7BE5',secondary:'#1A1F3C'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+#password-overlay {
+opacity: 1;
+transition: opacity 0.3s ease;
+}
+body {
+background-color: #0D0D0D;
+color: #fff;
+}
+.hero-section {
+background-image: linear-gradient(to right, rgba(10, 10, 20, 0.9), rgba(10, 10, 20, 0.6)), url('https://readdy.ai/api/search-image?query=abstract%20financial%20data%20visualization%20with%20blue%20glowing%20lines%20and%20graphs%20on%20dark%20background%2C%20futuristic%20technology%20interface%20showing%20market%20trends%20and%20analytics%2C%20professional%20sleek%20design%20with%20depth%20and%20dimension&width=1920&height=800&seq=hero1&orientation=landscape');
+background-size: cover;
+background-position: center;
+}
+.custom-input {
+background-color: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.custom-input:focus {
+border-color: #2C7BE5;
+outline: none;
+}
+.language-toggle input:checked + .toggle-circle {
+transform: translateX(100%);
+background-color: #2C7BE5;
+}
+.language-toggle input:checked ~ .toggle-bg {
+background-color: rgba(44, 123, 229, 0.2);
+}
+.custom-checkbox {
+appearance: none;
+-webkit-appearance: none;
+width: 20px;
+height: 20px;
+border: 2px solid rgba(255, 255, 255, 0.2);
+border-radius: 4px;
+background-color: transparent;
+position: relative;
+cursor: pointer;
+}
+.custom-checkbox:checked {
+background-color: #2C7BE5;
+border-color: #2C7BE5;
+}
+.custom-checkbox:checked::after {
+content: '';
+position: absolute;
+top: 2px;
+left: 6px;
+width: 6px;
+height: 10px;
+border: solid white;
+border-width: 0 2px 2px 0;
+transform: rotate(45deg);
+}
+</style>
+</head>
+<body>
+<header class="fixed top-0 left-0 right-0 z-50 bg-secondary bg-opacity-95 backdrop-blur-sm">
+<div class="container mx-auto px-4 py-3 flex items-center justify-between">
+<a href="https://indexforge.tech" id="logo-link" class="flex items-center gap-2">
+<img src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/1400095e3765872257f4b6eff389e667.png" alt="IndexForge Logo" class="h-8 w-auto">
+<span class="text-2xl font-['Inter'] font-bold" style="background: linear-gradient(120deg, #E0F4FF, #87CEEB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;"><span style="text-shadow: 0 0 20px rgba(135, 206, 235, 0.3);">Index</span>Forge</span>
+</a>
+<div class="flex-1"></div>
+<nav class="hidden md:flex items-center space-x-8 mr-8">
+<a href="#top" class="text-white hover:text-primary transition-colors nav-link" data-lang-en="Home" data-lang-fr="Accueil" id="home-link">Home</a>
+<a href="#about" class="text-white hover:text-primary transition-colors nav-link" data-lang-en="About" data-lang-fr="À propos" id="about-link">About</a>
+<a href="#contact" class="text-white hover:text-primary transition-colors nav-link" data-lang-en="Contact" data-lang-fr="Contact" id="contact-link">Contact</a>
+</nav>
+<div class="flex items-center space-x-4">
+<div class="relative" id="language-dropdown">
+<button class="flex items-center space-x-2 text-gray-300 hover:text-white px-3 py-2 rounded-button border border-gray-700 hover:border-gray-600 transition-colors" id="language-selector">
+<i class="ri-global-line"></i>
+<span class="text-sm current-language">English</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+<div class="hidden absolute right-0 mt-2 w-48 bg-secondary border border-gray-700 rounded-lg shadow-lg py-2 z-50" id="language-menu">
+<a href="#" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700" data-lang="en">
+<span class="w-5 h-5 flex items-center justify-center mr-2">🇬🇧</span>
+English
+</a>
+<a href="#" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700" data-lang="fr">
+<span class="w-5 h-5 flex items-center justify-center mr-2">🇫🇷</span>
+Français
+</a>
+</div>
+</div>
+<a href="#demo" class="hidden md:inline-block px-4 py-2 bg-primary text-white rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap" data-lang-en="Demo" data-lang-fr="Démo">Demo</a>
+<button class="md:hidden w-10 h-10 flex items-center justify-center text-white" id="mobile-menu-button">
+<i class="ri-menu-line ri-xl"></i>
+</button>
+</div>
+</div>
+<div id="mobile-menu" class="hidden md:hidden bg-secondary py-4 px-4">
+<nav class="flex flex-col space-y-4">
+<a href="#top" class="text-white hover:text-primary transition-colors nav-link" data-lang-en="Home" data-lang-fr="Accueil" id="mobile-home-link">Home</a>
+<a href="#about" class="text-white hover:text-primary transition-colors nav-link" data-lang-en="About" data-lang-fr="À propos" id="mobile-about-link">About</a>
+<a href="#contact" class="text-white hover:text-primary transition-colors nav-link" data-lang-en="Contact" data-lang-fr="Contact" id="mobile-contact-link">Contact</a>
+<a href="#demo" class="inline-block px-4 py-2 bg-primary text-white rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap nav-link" data-lang-en="Demo" data-lang-fr="Démo" id="mobile-demo-link">Demo</a>
+</nav>
+</div>
+</header>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="hero-section min-h-[90vh] flex items-center">
+<div class="container mx-auto px-4 py-20">
+<div class="max-w-3xl">
+<h1 class="text-4xl md:text-6xl font-bold mb-4" data-lang-en="Simple. Fast. Powerful." data-lang-fr="Simple. Rapide. Puissant.">Simple. Fast. Powerful.</h1>
+<h2 class="text-xl md:text-2xl text-gray-300 mb-8" data-lang-en="Launch your custom financial index in just three simple steps" data-lang-fr="Lancez votre indice financier personnalisé en trois étapes simples">Launch your custom financial index in just three simple steps</h2>
+<div class="flex flex-wrap gap-4">
+<a href="#demo" class="px-6 py-3 bg-primary text-white rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap" data-lang-en="Start Building Your Index" data-lang-fr="Commencez à créer votre indice">Start Building Your Index</a>
+<a href="#about" class="px-6 py-3 bg-transparent border border-white text-white rounded-button hover:bg-white hover:bg-opacity-10 transition-colors whitespace-nowrap" data-lang-en="Learn More" data-lang-fr="En savoir plus">Learn More</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-20 bg-[#111827]">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-lang-en="Why Choose IndexForge?" data-lang-fr="Pourquoi choisir IndexForge?">Why Choose IndexForge?</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-secondary rounded-lg p-8 transform transition-transform hover:-translate-y-2">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-20 rounded-full mb-6">
+<i class="ri-rocket-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-bold mb-4" data-lang-en="Lightning Fast" data-lang-fr="Ultra Rapide">Lightning Fast</h3>
+<p class="text-gray-300" data-lang-en="Create and launch your custom index in minutes, not months. Our platform eliminates the traditional development cycle." data-lang-fr="Créez et lancez votre indice personnalisé en quelques minutes, pas en mois. Notre plateforme élimine le cycle de développement traditionnel.">Create and launch your custom index in minutes, not months. Our platform eliminates the traditional development cycle.</p>
+</div>
+<div class="bg-secondary rounded-lg p-8 transform transition-transform hover:-translate-y-2">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-20 rounded-full mb-6">
+<i class="ri-code-box-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-bold mb-4" data-lang-en="No Coding Required" data-lang-fr="Sans Programmation">No Coding Required</h3>
+<p class="text-gray-300" data-lang-en="Our intuitive interface makes index creation accessible to everyone, regardless of technical background." data-lang-fr="Notre interface intuitive rend la création d'indices accessible à tous, quelle que soit votre expertise technique.">Our intuitive interface makes index creation accessible to everyone, regardless of technical background.</p>
+</div>
+<div class="bg-secondary rounded-lg p-8 transform transition-transform hover:-translate-y-2">
+<div class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-20 rounded-full mb-6">
+<i class="ri-line-chart-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-bold mb-4" data-lang-en="Powerful Analytics" data-lang-fr="Analyses Puissantes">Powerful Analytics</h3>
+<p class="text-gray-300" data-lang-en="Backtest your index with historical data and optimize performance with our advanced analytics tools." data-lang-fr="Testez votre indice avec des données historiques et optimisez les performances grâce à nos outils d'analyse avancés.">Backtest your index with historical data and optimize performance with our advanced analytics tools.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-20 bg-[#0D0D0D]">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-lang-en="How It Works" data-lang-fr="Comment ça marche">How It Works</h2>
+<div class="relative">
+<div class="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent transform -translate-y-1/2 z-0"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+<div class="text-center relative group">
+<div class="w-20 h-20 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-6 group-hover:bg-primary transition-all duration-300">
+<i class="ri-search-line ri-2x text-primary group-hover:text-white"></i>
+</div>
+<div class="hidden md:block absolute top-[40px] right-0 w-8 h-8 transform translate-x-full text-primary opacity-50">
+<i class="ri-arrow-right-line ri-2x"></i>
+</div>
+<h3 class="text-xl font-bold mb-4" data-lang-en="Select Components" data-lang-fr="Sélectionnez les composants">Select Components</h3>
+<p class="text-gray-300" data-lang-en="Choose from thousands of stocks, ETFs, and other assets to include in your index." data-lang-fr="Choisissez parmi des milliers d'actions, d'ETF et d'autres actifs à inclure dans votre indice.">Choose from thousands of stocks, ETFs, and other assets to include in your index.</p>
+</div>
+<div class="text-center relative group">
+<div class="w-20 h-20 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-6 group-hover:bg-primary transition-all duration-300">
+<i class="ri-settings-4-line ri-2x text-primary group-hover:text-white"></i>
+</div>
+<div class="hidden md:block absolute top-[40px] right-0 w-8 h-8 transform translate-x-full text-primary opacity-50">
+<i class="ri-arrow-right-line ri-2x"></i>
+</div>
+<h3 class="text-xl font-bold mb-4" data-lang-en="Define Parameters" data-lang-fr="Définissez les paramètres">Define Parameters</h3>
+<p class="text-gray-300" data-lang-en="Set weighting methodologies, rebalancing frequencies, and other customization options." data-lang-fr="Définissez les méthodologies de pondération, les fréquences de rééquilibrage et d'autres options de personnalisation.">Set weighting methodologies, rebalancing frequencies, and other customization options.</p>
+</div>
+<div class="text-center relative group">
+<div class="w-20 h-20 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mx-auto mb-6 group-hover:bg-primary transition-all duration-300">
+<i class="ri-rocket-line ri-2x text-primary group-hover:text-white"></i>
+</div>
+<h3 class="text-xl font-bold mb-4" data-lang-en="Launch & Monitor" data-lang-fr="Lancez et surveillez">Launch & Monitor</h3>
+<p class="text-gray-300" data-lang-en="Publish your index and track its performance with our real-time monitoring dashboard." data-lang-fr="Publiez votre indice et suivez ses performances avec notre tableau de bord de surveillance en temps réel.">Publish your index and track its performance with our real-time monitoring dashboard.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section id="about" class="py-20 bg-[#111827]">
+<div class="container mx-auto px-4">
+<div class="flex flex-col lg:flex-row gap-12">
+<div class="lg:w-1/2">
+<h2 class="text-3xl md:text-4xl font-bold mb-6" data-lang-en="About IndexForge" data-lang-fr="À propos d'IndexForge">About IndexForge</h2>
+<div class="space-y-6">
+<p class="text-xl text-gray-300" data-lang-en="IndexForge empowers financial professionals to design and launch custom indices without coding or infrastructure overhead. What once took months can now be done in minutes." data-lang-fr="IndexForge permet aux professionnels de la finance de concevoir et de lancer des indices personnalisés sans codage ni frais d'infrastructure. Ce qui prenait autrefois des mois peut désormais être fait en quelques minutes.">IndexForge empowers financial professionals to design and launch custom indices without coding or infrastructure overhead. What once took months can now be done in minutes.</p>
+<div class="bg-[#1A1F3C] rounded-lg p-6 border-l-4 border-primary">
+<p class="text-gray-300" data-lang-en="IndexForge is now being incubated in France and aspires to become part of the French FinTech ecosystem." data-lang-fr="IndexForge est maintenant incubé en France et aspire à devenir un acteur majeur de l'écosystème FinTech français.">IndexForge is now being incubated in France and aspires to become part of the French FinTech ecosystem.</p>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center gap-3">
+<i class="ri-tools-line text-primary"></i>
+<p class="text-gray-300" data-lang-en="Intuitive index design tools that require no programming knowledge" data-lang-fr="Outils de conception d'indices intuitifs ne nécessitant aucune connaissance en programmation">Intuitive index design tools that require no programming knowledge</p>
+</div>
+<div class="flex items-center gap-3">
+<i class="ri-line-chart-line text-primary"></i>
+<p class="text-gray-300" data-lang-en="Real-time data integration from leading financial data providers" data-lang-fr="Intégration de données en temps réel des principaux fournisseurs de données financières">Real-time data integration from leading financial data providers</p>
+</div>
+<div class="flex items-center gap-3">
+<i class="ri-calculator-line text-primary"></i>
+<p class="text-gray-300" data-lang-en="Automated calculation engines with institutional-grade accuracy" data-lang-fr="Moteurs de calcul automatisés avec une précision de niveau institutionnel">Automated calculation engines with institutional-grade accuracy</p>
+</div>
+<div class="flex items-center gap-3">
+<i class="ri-shield-check-line text-primary"></i>
+<p class="text-gray-300" data-lang-en="Comprehensive compliance and regulatory reporting tools" data-lang-fr="Outils complets de conformité et de reporting réglementaire">Comprehensive compliance and regulatory reporting tools</p>
+</div>
+<div class="flex items-center gap-3">
+<i class="ri-stack-line text-primary"></i>
+<p class="text-gray-300" data-lang-en="Scalable infrastructure that grows with your business" data-lang-fr="Infrastructure évolutive qui s'adapte à votre entreprise">Scalable infrastructure that grows with your business</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:w-1/2">
+<h3 class="text-2xl font-bold mb-6" data-lang-en="Meet Our Team" data-lang-fr="Rencontrez notre équipe">Meet Our Team</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-secondary rounded-lg overflow-hidden">
+<div class="h-64 bg-gray-700" style="background-image: url('https://readdy.ai/api/search-image?query=professional%20portrait%20of%20a%20confident%20male%20CEO%20in%20his%2040s%20with%20short%20dark%20hair%20and%20glasses%20wearing%20a%20business%20suit%20against%20a%20dark%20blue%20background%2C%20high%20quality%20professional%20headshot&width=400&height=400&seq=ceo2&orientation=squarish'); background-size: cover; background-position: center;"></div>
+<div class="p-6">
+<h4 class="text-xl font-bold mb-1">Michael Reynaud</h4>
+<p class="text-primary mb-4" data-lang-en="CEO & Founder" data-lang-fr="PDG et fondateur">CEO & Founder</p>
+<p class="text-gray-300" data-lang-en="Former quantitative analyst with 15 years of experience in index development at major financial institutions." data-lang-fr="Ancien analyste quantitatif avec 15 ans d'expérience dans le développement d'indices au sein de grandes institutions financières.">Former quantitative analyst with 15 years of experience in index development at major financial institutions.</p>
+</div>
+</div>
+<div class="bg-secondary rounded-lg overflow-hidden">
+<div class="h-64 bg-gray-700" style="background-image: url('https://readdy.ai/api/search-image?query=professional%20portrait%20of%20a%20male%20CTO%20in%20his%2030s%20with%20short%20brown%20hair%20wearing%20a%20modern%20business%20casual%20outfit%20against%20a%20dark%20blue%20background%2C%20high%20quality%20professional%20headshot&width=400&height=400&seq=cto2&orientation=squarish'); background-size: cover; background-position: center;"></div>
+<div class="p-6">
+<h4 class="text-xl font-bold mb-1">Thomas Laurent</h4>
+<p class="text-primary mb-4" data-lang-en="CTO & Co-founder" data-lang-fr="Directeur technique et co-fondateur">CTO & Co-founder</p>
+<p class="text-gray-300" data-lang-en="Tech innovator with expertise in financial data systems and machine learning applications in finance." data-lang-fr="Innovateur technologique avec une expertise dans les systèmes de données financières et les applications d'apprentissage automatique en finance.">Tech innovator with expertise in financial data systems and machine learning applications in finance.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Demo Section -->
+<section id="demo" class="py-20 bg-[#0D0D0D]">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16" data-lang-en="Try Our Demo" data-lang-fr="Essayez notre démo">Try Our Demo</h2>
+<div class="bg-secondary rounded-lg p-4 md:p-6 lg:p-8">
+<div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+<div class="lg:w-1/3">
+<div class="bg-[#141B33] rounded-lg p-6 mb-6">
+<h3 class="text-xl font-bold mb-4" data-lang-en="Step 1: Choose Method" data-lang-fr="Étape 1 : Choisir la méthode">Step 1: Choose Method</h3>
+<div class="mb-6">
+<div class="relative" id="weighting-method-dropdown">
+<div class="custom-input rounded py-2 px-4 text-white flex items-center justify-between cursor-pointer group relative" id="weighting-method-selector">
+<div class="flex items-center gap-2">
+<span id="selected-weighting-method" data-lang-en="Equal Weighted" data-lang-fr="Pondération égale">Equal Weighted</span>
+<i class="ri-information-line text-gray-400 text-sm"></i>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1" data-lang-en="Equal Weighted" data-lang-fr="Pondération égale">Equal Weighted</h4>
+<p data-lang-en="Each component has the same weight in the index, providing equal representation regardless of size." data-lang-fr="Chaque composant a le même poids dans l'indice, offrant une représentation égale quelle que soit sa taille.">Each component has the same weight in the index, providing equal representation regardless of size.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1" data-lang-en="Best for:" data-lang-fr="Idéal pour :">Best for:</p>
+<ul class="list-disc pl-4">
+<li data-lang-en="Reducing concentration risk" data-lang-fr="Réduire le risque de concentration">Reducing concentration risk</li>
+<li data-lang-en="Small-cap exposure" data-lang-fr="Exposition aux petites capitalisations">Small-cap exposure</li>
+<li data-lang-en="Sector diversification" data-lang-fr="Diversification sectorielle">Sector diversification</li>
+</ul>
+</div>
+</div>
+</div>
+<i class="ri-arrow-down-s-line"></i>
+</div>
+<div class="hidden absolute left-0 right-0 mt-2 bg-[#141B33] border border-gray-700 rounded-lg shadow-lg z-10" id="weighting-method-menu">
+<div class="py-1">
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between weighting-option selected group relative">
+<div>
+<span>Equal Weighted</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1">Equal Weighted</h4>
+<p>Each component has the same weight in the index, providing equal representation regardless of size.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1">Best for:</p>
+<ul class="list-disc pl-4">
+<li>Reducing concentration risk</li>
+<li>Small-cap exposure</li>
+<li>Sector diversification</li>
+</ul>
+</div>
+</div>
+</div>
+<i class="ri-check-line text-primary"></i>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between weighting-option group relative">
+<div>
+<span>Price Weighted</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1">Price Weighted</h4>
+<p>Components are weighted based on their absolute price levels, with higher-priced stocks having more influence.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1">Best for:</p>
+<ul class="list-disc pl-4">
+<li>Traditional blue-chip indices</li>
+<li>Price momentum strategies</li>
+<li>Simple calculation method</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between weighting-option group relative">
+<div>
+<span>User-defined</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1">User-defined</h4>
+<p>Customize weights or number of shares for each component based on your strategy.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1">Best for:</p>
+<ul class="list-disc pl-4">
+<li>Custom investment strategies</li>
+<li>Factor-based weighting</li>
+<li>Thematic investing</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 py-2 text-gray-500 flex items-center group relative cursor-not-allowed">
+<div>
+<span>Market Cap Weighted (coming soon)</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 p-2 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+This feature will be available in the next update. Components will be weighted according to their market capitalization.
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-[#141B33] rounded-lg p-6 mb-6">
+<h3 class="text-xl font-bold mb-4" data-lang-en="Step 2: Method Parameters" data-lang-fr="Étape 2 : Paramètres de la méthode">Step 2: Method Parameters</h3>
+<div id="equal-weighted-params" class="mb-4">
+<div class="mb-4">
+<label class="block text-gray-300 mb-2" data-lang-en="Initial Index Value" data-lang-fr="Valeur initiale de l'indice">Initial Index Value</label>
+<input type="number" class="w-full custom-input rounded py-2 px-4 text-white" value="1000">
+</div>
+<div class="mb-4">
+<label class="block text-gray-300 mb-2" data-lang-en="Initial Date" data-lang-fr="Date initiale">Initial Date</label>
+<input type="date" class="w-full custom-input rounded py-2 px-4 text-white text-sm" style="width: calc(100% - 2px);" value="2020-06-10">
+</div>
+</div>
+<div id="price-weighted-params" class="mb-4 hidden">
+</div>
+<div id="user-defined-params" class="mb-4 hidden">
+<div class="mb-4">
+<label class="block text-gray-300 mb-2">Divisor Type</label>
+<div class="text-sm text-gray-400 mb-3">
+The divisor is used to normalize the index value and maintain continuity when there are changes in the index composition or corporate actions. Choose between a fixed value or a reference date.
+</div>
+<div class="relative" id="divisor-type-dropdown">
+<div class="custom-input rounded py-2 px-4 text-white flex items-center justify-between cursor-pointer" id="divisor-type-selector">
+<div class="flex items-center gap-2">
+<span id="selected-divisor-type">Value</span>
+<i class="ri-information-line text-gray-400 text-sm"></i>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1">Index Divisor</h4>
+<p class="mb-2">The divisor ensures that only relative changes in the index components affect the index value, not absolute price changes.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1">When to adjust:</p>
+<ul class="list-disc pl-4">
+<li>Corporate actions (splits, dividends)</li>
+<li>Component changes</li>
+<li>Rebalancing events</li>
+</ul>
+</div>
+</div>
+</div>
+<i class="ri-arrow-down-s-line"></i>
+</div>
+<div class="hidden absolute left-0 right-0 mt-2 bg-[#141B33] border border-gray-700 rounded-lg shadow-lg z-10" id="divisor-type-menu">
+<div class="py-1">
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between divisor-option selected group relative">
+<div>
+<span>Value</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1">Fixed Value Divisor</h4>
+<p class="mb-2">Set a specific numerical value as the divisor. This approach is simpler and provides direct control over the initial index value.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1">Best for:</p>
+<ul class="list-disc pl-4">
+<li>New indices starting from a specific base value</li>
+<li>Simple index calculations</li>
+<li>Direct control over initial index level</li>
+</ul>
+</div>
+</div>
+</div>
+<i class="ri-check-line text-primary"></i>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between divisor-option group relative">
+<div>
+<span>Normalised to Date</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-72 p-3 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+<h4 class="font-bold mb-1">Date-based Normalization</h4>
+<p class="mb-2">Use a specific historical date's value as the base. This method is useful for comparing performance over time or aligning with existing indices.</p>
+<div class="mt-2 text-xs text-gray-400">
+<p class="mb-1">Best for:</p>
+<ul class="list-disc pl-4">
+<li>Historical performance comparison</li>
+<li>Benchmark alignment</li>
+<li>Back-testing strategies</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-4" id="divisor-value-input">
+<label class="block text-gray-300 mb-2">Divisor Value</label>
+<input type="number" class="w-full custom-input rounded py-2 px-4 text-white" value="1000">
+</div>
+<div class="mb-4 hidden" id="divisor-date-input">
+<label class="block text-gray-300 mb-2">Normalisation Date</label>
+<input type="date" class="w-full custom-input rounded py-2 px-4 text-white" value="2020-06-10">
+</div>
+<div class="mb-4">
+<label class="block text-gray-300 mb-2">Type</label>
+<div class="flex gap-4">
+<label class="flex items-center">
+<input type="radio" name="weight-type" value="shares" class="mr-2" checked>
+<span class="text-white">Number of Shares</span>
+</label>
+<label class="flex items-center">
+<input type="radio" name="weight-type" value="weights" class="mr-2">
+<span class="text-white">Weights</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-[#141B33] rounded-lg p-6">
+<h3 class="text-xl font-bold mb-4" data-lang-en="Step 3: Select Components" data-lang-fr="Étape 3 : Sélectionner les composants">Step 3: Select Components</h3>
+<div class="mb-4">
+<div class="flex gap-4 mb-4">
+<button class="flex-1 px-4 py-2 bg-primary text-white rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap" id="importBtn" data-lang-en="Import CSV" data-lang-fr="Importer CSV">
+<i class="ri-upload-line mr-2"></i>Import CSV
+</button>
+<button class="flex-1 px-4 py-2 bg-transparent border border-primary text-primary rounded-button hover:bg-primary hover:bg-opacity-10 transition-colors whitespace-nowrap" id="downloadTemplateBtn" data-lang-en="Template" data-lang-fr="Modèle">
+<i class="ri-download-line mr-2"></i>Template
+</button>
+</div>
+<div class="relative mb-4">
+<input type="text" class="w-full custom-input rounded py-2 px-4 pr-10 text-white" placeholder="Search by symbol or name..." id="assetSearch" data-lang-en="Search by symbol or name..." data-lang-fr="Rechercher par symbole ou nom...">
+<div class="absolute right-3 top-2.5 w-5 h-5 flex items-center justify-center">
+<i class="ri-search-line text-gray-400"></i>
+</div>
+</div>
+<div class="custom-input rounded p-2 mb-4 max-h-[200px] overflow-y-auto" id="componentsList">
+<div class="grid grid-cols-1 gap-1">
+</div>
+</div>
+<div class="custom-input rounded p-2 max-h-[280px] overflow-y-auto" id="selectedAssets">
+</div>
+</div>
+<button class="w-full px-4 py-2 bg-primary text-white rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap mt-4" id="calculateBtn" data-lang-en="Run backtest" data-lang-fr="Lancer le backtest">
+Run backtest
+</button>
+</div>
+</div>
+<div class="lg:w-2/3">
+<div class="bg-[#141B33] rounded-lg p-4 md:p-6 h-full">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold" data-lang-en="Step 4. Analyze backtest results" data-lang-fr="Étape 4. Analyser les résultats du backtest">Step 4. Analyze backtest results</h3>
+<button id="exportResultsBtn" class="px-4 py-2 bg-transparent border border-primary text-primary rounded-button hover:bg-primary hover:bg-opacity-10 transition-colors whitespace-nowrap flex items-center gap-2" data-lang-en="Export Results" data-lang-fr="Exporter les résultats">
+<i class="ri-download-line"></i>
+<span>Export Results</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-6">
+<div class="bg-[#0D0D0D] bg-opacity-50 rounded-lg p-3 md:p-4">
+<p class="text-gray-400 text-sm mb-1" data-lang-en="Index Value" data-lang-fr="Valeur de l'indice">Index Value</p>
+<p class="text-2xl font-bold text-primary">1,278.45</p>
+</div>
+<div class="bg-[#0D0D0D] bg-opacity-50 rounded-lg p-4">
+<p class="text-gray-400 text-sm mb-1" data-lang-en="Daily Return" data-lang-fr="Rendement quotidien">Daily Return</p>
+<p class="text-2xl font-bold text-[#22c55e]">+2.4%</p>
+</div>
+<div class="bg-[#0D0D0D] bg-opacity-50 rounded-lg p-4">
+<p class="text-gray-400 text-sm mb-1" data-lang-en="Components" data-lang-fr="Composants">Components</p>
+<p class="text-2xl font-bold">15</p>
+</div>
+</div>
+<div class="mb-6">
+<label class="block text-gray-300 mb-2">Backtest Period</label>
+<div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
+<div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full">
+<div class="custom-input rounded py-2 px-3 md:px-4 text-white flex items-center justify-between cursor-pointer w-full sm:w-[180px]">
+<span class="text-sm sm:text-base">June 10, 2020</span>
+<i class="ri-calendar-line ml-2"></i>
+</div>
+<span class="text-gray-300">to</span>
+<div class="custom-input rounded py-2 px-3 md:px-4 text-white flex items-center justify-between cursor-pointer w-full sm:w-[180px]">
+<span class="text-sm sm:text-base">June 10, 2025</span>
+<i class="ri-calendar-line ml-2"></i>
+</div>
+</div>
+<div class="flex-1"></div>
+</div>
+</div>
+<div class="h-[250px] md:h-[300px] mb-6" id="performance-chart"></div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mb-6">
+<div class="bg-[#0D0D0D] bg-opacity-50 rounded-lg p-4">
+<p class="text-gray-400 text-sm mb-1">Total Return</p>
+<p class="text-2xl font-bold text-primary">+127.8%</p>
+</div>
+<div class="bg-[#0D0D0D] bg-opacity-50 rounded-lg p-4">
+<p class="text-gray-400 text-sm mb-1">Annualized Volatility</p>
+<p class="text-2xl font-bold">18.4%</p>
+</div>
+<div class="bg-[#0D0D0D] bg-opacity-50 rounded-lg p-4">
+<p class="text-gray-400 text-sm mb-1">Sharpe Ratio</p>
+<p class="text-2xl font-bold">1.42</p>
+</div>
+</div>
+<div class="border-t border-gray-700 pt-4">
+<h3 class="text-xl font-bold mb-3" data-lang-en="Step 5. Prepare index to launch" data-lang-fr="Étape 5. Préparer le lancement de l'indice">Step 5. Prepare index to launch</h3>
+<div class="grid grid-cols-1 gap-6">
+<div class="mb-4">
+<label class="block text-gray-300 mb-2" data-lang-en="Index Name" data-lang-fr="Nom de l'indice">Index Name</label>
+<input type="text" class="w-full custom-input rounded py-2 px-3 text-white" placeholder="Enter index name" maxlength="50" data-lang-en="Enter index name" data-lang-fr="Entrer le nom de l'indice">
+</div>
+<div class="mb-4">
+<label class="block text-gray-300 mb-2" data-lang-en="Schedule Time & Timezone" data-lang-fr="Horaire et fuseau horaire">Schedule Time & Timezone</label>
+<div class="flex flex-wrap gap-4">
+<div class="flex-1 min-w-[200px]">
+<div class="flex items-center gap-4">
+<div class="flex-1">
+<label class="block text-gray-400 text-sm mb-2">Start</label>
+<input type="time" class="w-[120px] sm:w-full custom-input rounded py-2 px-3 text-white" value="09:30">
+</div>
+<div class="flex-1">
+<label class="block text-gray-400 text-sm mb-2">End</label>
+<input type="time" class="w-[120px] sm:w-full custom-input rounded py-2 px-3 text-white" value="16:00">
+</div>
+</div>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block text-gray-400 text-sm mb-2">Timezone</label>
+<div class="relative">
+<div class="custom-input rounded py-2 px-4 text-white flex items-center justify-between cursor-pointer" id="timezone-selector">
+<span id="selected-timezone">Eastern Time (UTC-5)</span>
+<i class="ri-arrow-down-s-line"></i>
+</div>
+<div class="hidden absolute left-0 right-0 mt-2 bg-[#141B33] border border-gray-700 rounded-lg shadow-lg z-10" id="timezone-menu">
+<div class="py-1">
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between timezone-option selected">
+<span>Eastern Time (UTC-5)</span>
+<i class="ri-check-line text-primary"></i>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer timezone-option">
+<span>UTC</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer timezone-option">
+<span>Central European Time (UTC+1)</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer timezone-option">
+<span>China Standard Time (UTC+8)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<label class="block text-gray-300 mb-3">Schedule Dates</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<button class="px-4 py-2 bg-primary bg-opacity-10 text-primary rounded hover:bg-opacity-20 transition-colors">Daily</button>
+<button class="px-4 py-2 bg-[#0D0D0D] text-gray-300 rounded hover:bg-opacity-70 transition-colors">Weekly</button>
+<button class="px-4 py-2 bg-[#0D0D0D] text-gray-300 rounded hover:bg-opacity-70 transition-colors">Monthly</button>
+<button class="px-4 py-2 bg-[#0D0D0D] text-gray-300 rounded hover:bg-opacity-70 transition-colors">Custom</button>
+</div>
+</div>
+<div class="mb-6">
+<label class="block text-gray-300 mb-2">Frequency</label>
+<div class="relative">
+<div class="custom-input rounded py-2 px-4 text-white flex items-center justify-between cursor-pointer" id="frequency-selector">
+<span id="selected-frequency">1 tick per day</span>
+<i class="ri-arrow-down-s-line"></i>
+</div>
+<div class="hidden absolute left-0 right-0 mt-2 bg-[#141B33] border border-gray-700 rounded-lg shadow-lg z-10" id="frequency-menu">
+<div class="py-1">
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer flex items-center justify-between frequency-option selected">
+<span>1 tick per second</span>
+<i class="ri-check-line text-primary"></i>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer frequency-option">
+<span>1 tick per minute</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer frequency-option">
+<span>1 tick per hour</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer frequency-option">
+<span>1 tick per day</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer frequency-option">
+<span>1 tick per week</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer frequency-option">
+<span>1 tick per month</span>
+</div>
+<div class="px-4 py-2 text-white hover:bg-primary hover:bg-opacity-10 cursor-pointer frequency-option">
+<span>Custom</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full px-6 py-3 bg-primary bg-opacity-50 text-white rounded-button cursor-not-allowed mt-6" disabled>
+<div class="flex items-center justify-center gap-2">
+<span data-lang-en="Launch Index" data-lang-fr="Lancer l'indice">Launch Index</span>
+<span class="text-sm" data-lang-en="(Coming Soon)" data-lang-fr="(Bientôt disponible)">(Coming Soon)</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</section>
+<!-- Roadmap Section -->
+<section class="py-20 bg-[#111827]">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-lang-en="Project Roadmap" data-lang-fr="Feuille de route">Project Roadmap</h2>
+<div class="relative">
+<div class="hidden md:block absolute left-[50%] top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary to-transparent transform -translate-x-1/2"></div>
+<div class="space-y-12 relative">
+<div class="flex flex-col md:flex-row items-center gap-8 group">
+<div class="md:w-1/2 md:text-right md:pr-12">
+<div class="bg-secondary rounded-lg p-6 transform transition-transform group-hover:-translate-y-1">
+<div class="flex items-center justify-end gap-4 mb-4">
+<h3 class="text-xl font-bold">Market Cap Weighted Index Method</h3>
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full flex-shrink-0">
+<i class="ri-line-chart-line text-primary ri-xl"></i>
+</div>
+</div>
+<p class="text-gray-300">The most popular index calculation method, enabling creation of indices that reflect market value proportions.</p>
+</div>
+</div>
+<div class="md:w-1/2 md:pl-12">
+<div class="w-4 h-4 bg-primary rounded-full mx-auto md:ml-[-8px] relative">
+<div class="absolute inset-0 bg-primary rounded-full animate-ping opacity-20"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-8 group">
+<div class="md:w-1/2 md:text-right md:pr-12 md:order-2">
+<div class="bg-secondary rounded-lg p-6 transform transition-transform group-hover:-translate-y-1">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full flex-shrink-0">
+<i class="ri-database-2-line text-primary ri-xl"></i>
+</div>
+<h3 class="text-xl font-bold">Live Data Feeds Integration</h3>
+</div>
+<p class="text-gray-300">Connecting to real-time market data sources to ensure accurate and timely index valuation.</p>
+</div>
+</div>
+<div class="md:w-1/2 md:pl-12 md:order-1">
+<div class="w-4 h-4 bg-primary rounded-full mx-auto md:ml-[-8px] relative">
+<div class="absolute inset-0 bg-primary rounded-full animate-ping opacity-20"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-8 group">
+<div class="md:w-1/2 md:text-right md:pr-12">
+<div class="bg-secondary rounded-lg p-6 transform transition-transform group-hover:-translate-y-1">
+<div class="flex items-center justify-end gap-4 mb-4">
+<h3 class="text-xl font-bold">Real-Time Index Launch</h3>
+<div class="w-12 h-12 flex items-center justify-center bg-primary bg-opacity-10 rounded-full flex-shrink-0">
+<i class="ri-rocket-line text-primary ri-xl"></i>
+</div>
+</div>
+<p class="text-gray-300">Moving beyond backtesting to enable actual index publication with scheduled price updates.</p>
+</div>
+</div>
+<div class="md:w-1/2 md:pl-12">
+<div class="w-4 h-4 bg-primary rounded-full mx-auto md:ml-[-8px] relative">
+<div class="absolute inset-0 bg-primary rounded-full animate-ping opacity-20"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section id="contact" class="py-20 bg-[#0D0D0D]">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl md:text-4xl font-bold text-center mb-16" data-lang-en="Contact Us" data-lang-fr="Contactez-nous">Contact Us</h2>
+<div class="flex flex-col md:flex-row gap-8">
+<div class="md:w-1/2">
+<form class="bg-secondary rounded-lg p-8">
+<div class="mb-6">
+<label class="block text-gray-300 mb-2" for="name" data-lang-en="Name" data-lang-fr="Nom">Name</label>
+<input type="text" id="name" class="w-full custom-input rounded py-3 px-4 text-white" required>
+</div>
+<div class="mb-6">
+<label class="block text-gray-300 mb-2" for="email" data-lang-en="Email" data-lang-fr="Email">Email</label>
+<input type="email" id="email" class="w-full custom-input rounded py-3 px-4 text-white" required>
+</div>
+<div class="mb-6">
+<label class="block text-gray-300 mb-2" for="company" data-lang-en="Company" data-lang-fr="Entreprise">Company</label>
+<input type="text" id="company" class="w-full custom-input rounded py-3 px-4 text-white">
+</div>
+<div class="mb-6">
+<label class="block text-gray-300 mb-2" for="message" data-lang-en="Message" data-lang-fr="Message">Message</label>
+<textarea id="message" rows="5" class="w-full custom-input rounded py-3 px-4 text-white" required></textarea>
+</div>
+<div class="mb-6 flex items-start">
+<input type="checkbox" id="privacy" class="custom-checkbox mr-3 mt-1">
+<label for="privacy" class="text-gray-300 text-sm" data-lang-en="I agree to the privacy policy and terms of service" data-lang-fr="J'accepte la politique de confidentialité et les conditions d'utilisation">I agree to the privacy policy and terms of service</label>
+</div>
+<button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap" data-lang-en="Send Message" data-lang-fr="Envoyer le message">Send Message</button>
+</form>
+</div>
+<div class="md:w-1/2">
+<div class="bg-secondary rounded-lg p-8 h-full flex flex-col">
+<h3 class="text-xl font-bold mb-6" data-lang-en="Get in Touch" data-lang-fr="Entrez en contact">Get in Touch</h3>
+<div class="mb-8">
+<h4 class="font-bold mb-3" data-lang-en="Email Us" data-lang-fr="Envoyez-nous un email">Email Us</h4>
+<div class="flex items-center gap-2 text-gray-300">
+<i class="ri-mail-line text-primary text-xl"></i>
+<a href="mailto:contact@indexforge.tech" class="hover:text-primary transition-colors">contact@indexforge.tech</a>
+</div>
+</div>
+<div class="mt-4">
+<h4 class="font-medium mb-4" data-lang-en="We're happy to:" data-lang-fr="Nous sommes heureux de :">We're happy to:</h4>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+<i class="ri-presentation-line text-primary"></i>
+</div>
+<span class="text-gray-300">Walk you through a personalized demo</span>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+<i class="ri-discuss-line text-primary"></i>
+</div>
+<span class="text-gray-300">Discuss your use case and pricing</span>
+</li>
+<li class="flex items-start gap-3">
+<div class="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+<i class="ri-team-line text-primary"></i>
+</div>
+<span class="text-gray-300">Explore collaboration opportunities</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-secondary py-12">
+<div class="container mx-auto px-4">
+<div class="flex flex-col md:flex-row justify-between mb-12">
+<div class="mb-8 md:mb-0">
+<a href="#" class="flex items-center gap-2 mb-4">
+<img src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/1400095e3765872257f4b6eff389e667.png" alt="IndexForge Logo" class="h-8 w-auto">
+<span class="text-2xl font-['Inter'] font-bold" style="background: linear-gradient(120deg, #E0F4FF, #87CEEB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;"><span style="text-shadow: 0 0 20px rgba(135, 206, 235, 0.3);">Index</span>Forge</span>
+</a>
+<p class="text-gray-400 max-w-md" data-lang-en="Empowering financial professionals to create custom indices without code. Simple, fast, and powerful." data-lang-fr="Permettre aux professionnels de la finance de créer des indices personnalisés sans code. Simple, rapide et puissant.">Empowering financial professionals to create custom indices without code. Simple, fast, and powerful.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+<div>
+<h4 class="font-bold mb-4" data-lang-en="Product" data-lang-fr="Produit">Product</h4>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Features" data-lang-fr="Fonctionnalités">Features</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Pricing" data-lang-fr="Tarification">Pricing</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Demo" data-lang-fr="Démo">Demo</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Documentation" data-lang-fr="Documentation">Documentation</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4" data-lang-en="Company" data-lang-fr="Entreprise">Company</h4>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="About" data-lang-fr="À propos">About</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Team" data-lang-fr="Équipe">Team</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Careers" data-lang-fr="Carrières">Careers</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Contact" data-lang-fr="Contact">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4" data-lang-en="Legal" data-lang-fr="Mentions légales">Legal</h4>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Privacy Policy" data-lang-fr="Politique de confidentialité">Privacy Policy</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Terms of Service" data-lang-fr="Conditions d'utilisation">Terms of Service</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition-colors" data-lang-en="Cookie Policy" data-lang-fr="Politique des cookies">Cookie Policy</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+<p class="text-gray-400 mb-4 md:mb-0" data-lang-en="© 2025 IndexForge. All rights reserved." data-lang-fr="© 2025 IndexForge. Tous droits réservés.">© 2025 IndexForge. All rights reserved.</p>
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4">
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<i class="ri-linkedin-fill text-xl"></i>
+</a>
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<i class="ri-twitter-x-fill text-xl"></i>
+</a>
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<i class="ri-facebook-fill text-xl"></i>
+</a>
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<i class="ri-discord-fill text-xl"></i>
+</a>
+</div>
+<div class="flex items-center gap-3">
+<i class="ri-visa-fill text-gray-400 text-2xl"></i>
+<i class="ri-mastercard-fill text-gray-400 text-2xl"></i>
+<i class="ri-paypal-fill text-gray-400 text-2xl"></i>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script id="mobile-menu-script">
+document.addEventListener('DOMContentLoaded', function() {
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+const logoLink = document.getElementById('logo-link');
+const homeLink = document.getElementById('home-link');
+function handleNavClick(e) {
+e.preventDefault();
+const href = this.getAttribute('href');
+if (href === 'https://indexforge.tech') {
+window.location.href = href;
+return;
+}
+if (href === '#top') {
+if (window.scrollY === 0) {
+window.location.href = 'https://indexforge.tech';
+} else {
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+}
+} else if (href && href.startsWith('#')) {
+const targetElement = document.querySelector(href);
+if (targetElement) {
+const headerHeight = document.querySelector('header').offsetHeight;
+const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+window.scrollTo({
+top: targetPosition,
+behavior: 'smooth'
+});
+if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+mobileMenu.classList.add('hidden');
+mobileMenuButton.innerHTML = '<i class="ri-menu-line ri-xl"></i>';
+}
+}
+}
+}
+window.addEventListener('scroll', function() {
+if (homeLink) {
+if (window.scrollY === 0) {
+homeLink.setAttribute('href', 'https://indexforge.tech');
+} else {
+homeLink.setAttribute('href', '#top');
+}
+}
+});
+// Add smooth scrolling to all navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', handleNavClick);
+});
+logoLink.addEventListener('click', function(e) {
+e.preventDefault();
+window.location.href = 'https://indexforge.tech';
+});
+mobileMenuButton.addEventListener('click', function() {
+mobileMenu.classList.toggle('hidden');
+if (mobileMenu.classList.contains('hidden')) {
+mobileMenuButton.innerHTML = '<i class="ri-menu-line ri-xl"></i>';
+} else {
+mobileMenuButton.innerHTML = '<i class="ri-close-line ri-xl"></i>';
+}
+});
+document.querySelectorAll('.nav-link').forEach(link => {
+link.addEventListener('click', handleNavClick);
+});
+});
+</script>
+<script id="language-toggle-script">
+document.addEventListener('DOMContentLoaded', function() {
+const languageSelector = document.getElementById('language-selector');
+const languageMenu = document.getElementById('language-menu');
+const currentLanguage = document.querySelector('.current-language');
+function toggleLanguageMenu() {
+languageMenu.classList.toggle('hidden');
+}
+function handleLanguageSelection(event) {
+if (event.target.closest('a')) {
+const selectedLang = event.target.closest('a').getAttribute('data-lang');
+const selectedText = event.target.closest('a').textContent.trim();
+currentLanguage.textContent = selectedText;
+const elementsWithLang = document.querySelectorAll(`[data-lang-${selectedLang}]`);
+elementsWithLang.forEach(element => {
+if (element.hasAttribute(`data-lang-${selectedLang}`)) {
+if (element.tagName.toLowerCase() === 'input' && element.type === 'text') {
+element.placeholder = element.getAttribute(`data-lang-${selectedLang}`);
+} else {
+element.textContent = element.getAttribute(`data-lang-${selectedLang}`);
+}
+}
+});
+toggleLanguageMenu();
+}
+}
+languageSelector.addEventListener('click', toggleLanguageMenu);
+languageMenu.addEventListener('click', handleLanguageSelection);
+document.addEventListener('click', function(event) {
+if (!event.target.closest('#language-dropdown')) {
+languageMenu.classList.add('hidden');
+}
+});
+});
+</script>
+<script id="asset-management-script">
+document.addEventListener('DOMContentLoaded', function() {
+const importBtn = document.getElementById('importBtn');
+const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
+const selectedAssets = document.getElementById('selectedAssets');
+const assetSearch = document.getElementById('assetSearch');
+const componentsList = document.getElementById('componentsList');
+function initializeDefaultComponents() {
+const selectedSymbols = Array.from(selectedAssets.querySelectorAll('[data-asset]')).map(el => el.dataset.asset);
+setTimeout(() => {
+const checkboxes = componentsList.querySelectorAll('input[type="checkbox"]');
+checkboxes.forEach(checkbox => {
+if (selectedSymbols.includes(checkbox.dataset.symbol)) {
+checkbox.checked = true;
+}
+});
+}, 0);
+}
+const availableComponents = [
+{ symbol: 'AAPL', name: 'Apple Inc.' },
+{ symbol: 'MSFT', name: 'Microsoft Corporation' },
+{ symbol: 'GOOGL', name: 'Alphabet Inc.' },
+{ symbol: 'AMZN', name: 'Amazon.com Inc.' },
+{ symbol: 'NVDA', name: 'NVIDIA Corporation' },
+{ symbol: 'META', name: 'Meta Platforms Inc.' },
+{ symbol: 'BRK.B', name: 'Berkshire Hathaway Inc.' },
+{ symbol: 'TSLA', name: 'Tesla Inc.' },
+{ symbol: 'V', name: 'Visa Inc.' },
+{ symbol: 'UNH', name: 'UnitedHealth Group Inc.' },
+{ symbol: 'JPM', name: 'JPMorgan Chase & Co.' },
+{ symbol: 'JNJ', name: 'Johnson & Johnson' },
+{ symbol: 'XOM', name: 'Exxon Mobil Corporation' },
+{ symbol: 'WMT', name: 'Walmart Inc.' },
+{ symbol: 'MA', name: 'Mastercard Inc.' }
+];
+function renderComponentsList(components) {
+const grid = componentsList.querySelector('.grid');
+grid.innerHTML = components.map(comp => `
+<div class="flex items-center justify-between py-1.5 px-2 bg-[#0D0D0D] rounded hover:bg-opacity-70">
+<div class="flex items-center">
+<input type="checkbox" class="custom-checkbox mr-2" data-symbol="${comp.symbol}">
+<span class="font-medium text-sm mr-2">${comp.symbol}</span>
+<span class="text-gray-400 text-sm">${comp.name}</span>
+</div>
+</div>
+`).join('');
+}
+function createAssetElement(symbol, amount = 0, weight = 0) {
+const assetDiv = document.createElement('div');
+assetDiv.className = 'flex items-center justify-between py-1.5 px-2 bg-[#0D0D0D] rounded hover:bg-opacity-70';
+assetDiv.dataset.asset = symbol;
+assetDiv.innerHTML = `
+<div class="flex items-center gap-4">
+<span class="font-medium text-sm">${symbol}</span>
+<div class="flex items-center gap-2">
+<input type="number" class="w-20 custom-input rounded py-0.5 px-2 text-white text-sm" placeholder="Amount" value="${amount}">
+<input type="number" class="w-16 custom-input rounded py-0.5 px-2 text-white text-sm" placeholder="Weight %" value="${weight}">
+</div>
+</div>
+<button class="text-gray-400 hover:text-white remove-asset">
+<i class="ri-close-line"></i>
+</button>
+`;
+return assetDiv;
+}
+function updateCheckboxState(symbol, checked) {
+const checkbox = componentsList.querySelector(`input[data-symbol="${symbol}"]`);
+if (checkbox) {
+checkbox.checked = checked;
+}
+}
+function handleAssetSelection(e) {
+if (e.target.type === 'checkbox') {
+const symbol = e.target.dataset.symbol;
+if (e.target.checked) {
+const assetElement = createAssetElement(symbol, 0, 0);
+selectedAssets.appendChild(assetElement);
+} else {
+const existingAsset = selectedAssets.querySelector(`[data-asset="${symbol}"]`);
+if (existingAsset) {
+existingAsset.remove();
+}
+}
+}
+}
+function handleAssetSearch(e) {
+const searchTerm = e.target.value.toLowerCase();
+const filteredComponents = availableComponents.filter(comp =>
+comp.symbol.toLowerCase().includes(searchTerm) ||
+comp.name.toLowerCase().includes(searchTerm)
+);
+renderComponentsList(filteredComponents);
+// Restore checkbox states for filtered results
+selectedAssets.querySelectorAll('[data-asset]').forEach(asset => {
+updateCheckboxState(asset.dataset.asset, true);
+});
+}
+function createAssetElement(symbol, amount = 10, weight = 10) {
+const assetDiv = document.createElement('div');
+assetDiv.className = 'bg-[#0D0D0D] rounded py-1.5 px-2 flex items-center gap-2 text-sm mb-1';
+assetDiv.dataset.asset = symbol;
+const method = document.getElementById('selected-weighting-method').textContent;
+let inputFields = '';
+if (method === 'Equal Weighted') {
+inputFields = `
+<span class="text-gray-400 text-xs">Init price:</span>
+<input type="number" class="w-24 custom-input rounded py-0.5 px-1 text-white text-sm" value="10">
+`;
+} else if (method === 'User-defined') {
+const weightType = document.querySelector('input[name="weight-type"]:checked').value;
+if (weightType === 'weights') {
+inputFields = `
+<span class="text-gray-400 text-xs">Weight:</span>
+<input type="number" class="w-20 custom-input rounded py-0.5 px-1 text-white text-sm" value="10">
+<span class="text-gray-400 text-xs">%</span>
+`;
+} else if (weightType === 'shares') {
+inputFields = `
+<span class="text-gray-400 text-xs">Amount:</span>
+<input type="number" class="w-24 custom-input rounded py-0.5 px-1 text-white text-sm" value="10">
+`;
+}
+}
+assetDiv.innerHTML = `
+<span class="font-medium w-14">${symbol}</span>
+${inputFields}
+<button class="text-gray-400 hover:text-white remove-asset ml-auto" title="Remove component">
+<i class="ri-delete-bin-line"></i>
+</button>
+`;
+return assetDiv;
+}
+function handleFileSelect(event) {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const text = e.target.result;
+const rows = text.split('\n');
+selectedAssets.innerHTML = '';
+rows.slice(1).forEach(row => {
+const [symbol, amount, weight] = row.split(',');
+if (symbol) {
+const assetElement = createAssetElement(
+symbol.trim(),
+parseFloat(amount) || 0,
+parseFloat(weight) || 0
+);
+selectedAssets.appendChild(assetElement);
+}
+});
+};
+reader.readAsText(file);
+}
+}
+function downloadTemplate() {
+const template = 'Symbol,Amount,Weight(%)\nAAPL,100,20\nMSFT,150,30\nGOOGL,75,25';
+const blob = new Blob([template], { type: 'text/csv' });
+const url = window.URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'index_components_template.csv';
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+window.URL.revokeObjectURL(url);
+}
+importBtn.addEventListener('click', () => {
+const input = document.createElement('input');
+input.type = 'file';
+input.accept = '.csv';
+input.addEventListener('change', handleFileSelect);
+input.click();
+});
+downloadTemplateBtn.addEventListener('click', downloadTemplate);
+selectedAssets.addEventListener('click', (e) => {
+if (e.target.closest('.remove-asset')) {
+const assetDiv = e.target.closest('[data-asset]');
+const symbol = assetDiv.dataset.asset;
+updateCheckboxState(symbol, false);
+assetDiv.remove();
+}
+});
+componentsList.addEventListener('change', handleAssetSelection);
+assetSearch.addEventListener('input', handleAssetSearch);
+// Initial render
+renderComponentsList(availableComponents);
+initializeDefaultComponents();
+});
+</script>
+<script id="weighting-method-script">
+document.addEventListener('DOMContentLoaded', function() {
+const weightingMethodSelector = document.getElementById('weighting-method-selector');
+const weightingMethodMenu = document.getElementById('weighting-method-menu');
+const divisorTypeSelector = document.getElementById('divisor-type-selector');
+const divisorTypeMenu = document.getElementById('divisor-type-menu');
+const timezoneSelector = document.getElementById('timezone-selector');
+const timezoneMenu = document.getElementById('timezone-menu');
+const selectedTimezone = document.getElementById('selected-timezone');
+const timezoneOptions = document.querySelectorAll('.timezone-option');
+const frequencySelector = document.getElementById('frequency-selector');
+const frequencyMenu = document.getElementById('frequency-menu');
+const selectedFrequency = document.getElementById('selected-frequency');
+const frequencyOptions = document.querySelectorAll('.frequency-option');
+function toggleTimezoneMenu() {
+timezoneMenu.classList.toggle('hidden');
+}
+function selectTimezone(option) {
+const selectedText = option.querySelector('span').textContent;
+selectedTimezone.textContent = selectedText;
+timezoneOptions.forEach(opt => {
+const checkIcon = opt.querySelector('.ri-check-line');
+if (checkIcon) checkIcon.remove();
+opt.classList.remove('selected');
+});
+option.classList.add('selected');
+option.innerHTML = `
+<span>${selectedText}</span>
+<i class="ri-check-line text-primary"></i>
+`;
+timezoneMenu.classList.add('hidden');
+}
+function toggleFrequencyMenu() {
+frequencyMenu.classList.toggle('hidden');
+}
+function selectFrequency(option) {
+const selectedText = option.querySelector('span').textContent;
+selectedFrequency.textContent = selectedText;
+frequencyOptions.forEach(opt => {
+const checkIcon = opt.querySelector('.ri-check-line');
+if (checkIcon) checkIcon.remove();
+opt.classList.remove('selected');
+});
+option.classList.add('selected');
+option.innerHTML = `
+<span>${selectedText}</span>
+<i class="ri-check-line text-primary"></i>
+`;
+frequencyMenu.classList.add('hidden');
+}
+timezoneSelector.addEventListener('click', toggleTimezoneMenu);
+timezoneOptions.forEach(option => {
+option.addEventListener('click', () => selectTimezone(option));
+});
+frequencySelector.addEventListener('click', toggleFrequencyMenu);
+frequencyOptions.forEach(option => {
+option.addEventListener('click', () => selectFrequency(option));
+});
+document.addEventListener('click', (event) => {
+if (!event.target.closest('#timezone-selector')) {
+timezoneMenu.classList.add('hidden');
+}
+if (!event.target.closest('#frequency-selector')) {
+frequencyMenu.classList.add('hidden');
+}
+});
+const selectedDivisorType = document.getElementById('selected-divisor-type');
+const divisorOptions = document.querySelectorAll('.divisor-option');
+const selectedWeightingMethod = document.getElementById('selected-weighting-method');
+const weightingOptions = document.querySelectorAll('.weighting-option');
+const manualAmountParams = document.getElementById('manual-amount-params');
+const marketCapParams = document.getElementById('market-cap-params');
+const floatAdjustedParams = document.getElementById('float-adjusted-params');
+const calculateBtn = document.getElementById('calculateBtn');
+const weightTypeRadios = document.querySelectorAll('input[name="weight-type"]');
+function showMethodParams(methodName) {
+const equalWeightedParams = document.getElementById('equal-weighted-params');
+const priceWeightedParams = document.getElementById('price-weighted-params');
+const userDefinedParams = document.getElementById('user-defined-params');
+equalWeightedParams.classList.add('hidden');
+priceWeightedParams.classList.add('hidden');
+userDefinedParams.classList.add('hidden');
+switch(methodName) {
+case 'Equal Weighted':
+equalWeightedParams.classList.remove('hidden');
+break;
+case 'Price Weighted':
+priceWeightedParams.classList.remove('hidden');
+break;
+case 'User-defined':
+userDefinedParams.classList.remove('hidden');
+break;
+}
+}
+document.addEventListener('DOMContentLoaded', function() {
+const divisorType = document.getElementById('divisor-type');
+const divisorValueInput = document.getElementById('divisor-value-input');
+const divisorDateInput = document.getElementById('divisor-date-input');
+divisorType.addEventListener('change', function() {
+if (this.value === 'value') {
+divisorValueInput.classList.remove('hidden');
+divisorDateInput.classList.add('hidden');
+} else {
+divisorValueInput.classList.add('hidden');
+divisorDateInput.classList.remove('hidden');
+}
+});
+});
+function toggleWeightingMenu() {
+weightingMethodMenu.classList.toggle('hidden');
+}
+function selectWeightingMethod(option) {
+const selectedText = option.querySelector('span').textContent;
+selectedWeightingMethod.textContent = selectedText;
+weightingOptions.forEach(opt => {
+const checkIcon = opt.querySelector('.ri-check-line');
+if (checkIcon) checkIcon.remove();
+opt.classList.remove('selected');
+});
+option.classList.add('selected');
+option.innerHTML = `
+<span>${selectedText}</span>
+<i class="ri-check-line text-primary"></i>
+`;
+weightingMethodMenu.classList.add('hidden');
+showMethodParams(selectedText);
+// Clear selected assets and uncheck all checkboxes
+const selectedAssets = document.getElementById('selectedAssets');
+selectedAssets.innerHTML = '';
+// Uncheck and temporarily disable all checkboxes
+const checkboxes = document.querySelectorAll('#componentsList input[type="checkbox"]');
+checkboxes.forEach(checkbox => {
+checkbox.checked = false;
+checkbox.disabled = true;
+});
+// Re-enable checkboxes after a short delay
+setTimeout(() => {
+checkboxes.forEach(checkbox => {
+checkbox.disabled = false;
+});
+}, 500);
+}
+calculateBtn.addEventListener('click', function() {
+const method = selectedWeightingMethod.textContent;
+const components = Array.from(document.querySelectorAll('#selectedAssets [data-asset]')).map(el => ({
+symbol: el.dataset.asset,
+amount: el.querySelector('input[type="number"]:nth-child(3)').value,
+weight: el.querySelector('input[type="number"]:nth-child(5)').value
+}));
+if (components.length === 0) {
+alert('Please select at least one component');
+return;
+}
+console.log('Calculating index with:', {
+method,
+components,
+period: 'Daily'
+});
+// Here you would typically make an API call to calculate the index
+// For demo purposes, we'll just update the chart
+updateChart();
+});
+function updateChart() {
+const chartDom = document.getElementById('performance-chart');
+const myChart = echarts.getInstanceByDom(chartDom);
+if (myChart) {
+myChart.setOption({
+series: [{
+data: [0, 20, 45, 58, 40, 52, 75, 95, 110, 125, 137.8]
+}]
+});
+}
+}
+weightingMethodSelector.addEventListener('click', toggleWeightingMenu);
+weightingOptions.forEach(option => {
+option.addEventListener('click', () => selectWeightingMethod(option));
+});
+weightTypeRadios.forEach(radio => {
+radio.addEventListener('change', () => {
+const selectedAssets = document.getElementById('selectedAssets');
+selectedAssets.innerHTML = '';
+// Uncheck and temporarily disable all checkboxes
+const checkboxes = document.querySelectorAll('#componentsList input[type="checkbox"]');
+checkboxes.forEach(checkbox => {
+checkbox.checked = false;
+checkbox.disabled = true;
+});
+// Re-enable checkboxes after a short delay
+setTimeout(() => {
+checkboxes.forEach(checkbox => {
+checkbox.disabled = false;
+});
+}, 500);
+});
+});
+function toggleDivisorMenu() {
+divisorTypeMenu.classList.toggle('hidden');
+}
+function selectDivisorType(option) {
+const selectedText = option.querySelector('span').textContent;
+selectedDivisorType.textContent = selectedText;
+divisorOptions.forEach(opt => {
+const checkIcon = opt.querySelector('.ri-check-line');
+if (checkIcon) checkIcon.remove();
+opt.classList.remove('selected');
+});
+option.classList.add('selected');
+option.innerHTML = `
+<div>
+<span>${selectedText}</span>
+<div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 p-2 bg-[#1A1F3C] text-sm text-gray-300 rounded-lg shadow-lg z-20">
+${selectedText === 'Value' ? 'Set a specific numerical value as the divisor for index calculation' : 'Use a specific date\'s value as the base for normalization'}
+</div>
+</div>
+<i class="ri-check-line text-primary"></i>
+`;
+divisorTypeMenu.classList.add('hidden');
+const divisorValueInput = document.getElementById('divisor-value-input');
+const divisorDateInput = document.getElementById('divisor-date-input');
+if (selectedText === 'Value') {
+divisorValueInput.classList.remove('hidden');
+divisorDateInput.classList.add('hidden');
+} else {
+divisorValueInput.classList.add('hidden');
+divisorDateInput.classList.remove('hidden');
+}
+}
+divisorTypeSelector.addEventListener('click', toggleDivisorMenu);
+divisorOptions.forEach(option => {
+option.addEventListener('click', () => selectDivisorType(option));
+});
+document.addEventListener('click', (event) => {
+if (!event.target.closest('#weighting-method-dropdown')) {
+weightingMethodMenu.classList.add('hidden');
+}
+if (!event.target.closest('#divisor-type-dropdown')) {
+divisorTypeMenu.classList.add('hidden');
+}
+});
+});
+</script>
+<script id="performance-chart-script">
+document.addEventListener('DOMContentLoaded', function() {
+const chartDom = document.getElementById('performance-chart');
+const myChart = echarts.init(chartDom);
+const exportResultsBtn = document.getElementById('exportResultsBtn');
+exportResultsBtn.addEventListener('click', function() {
+const dates = ['Jun 2020', 'Dec 2020', 'Jun 2021', 'Dec 2021', 'Jun 2022', 'Dec 2022', 'Jun 2023', 'Dec 2023', 'Jun 2024', 'Dec 2024', 'Jun 2025'];
+const indexValues = [1000, 1150, 1350, 1480, 1300, 1420, 1650, 1850, 2000, 2150, 2278];
+const benchmarkValues = [1000, 1100, 1220, 1350, 1250, 1300, 1450, 1600, 1700, 1850, 1950];
+let csvContent = 'Date,Your Index,S&P 500\n';
+dates.forEach((date, i) => {
+csvContent += `${date},${indexValues[i]},${benchmarkValues[i]}\n`;
+});
+const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+const link = document.createElement('a');
+const url = URL.createObjectURL(blob);
+link.setAttribute('href', url);
+link.setAttribute('download', 'backtest_results.csv');
+link.style.visibility = 'hidden';
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+});
+const option = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+textStyle: {
+color: '#1f2937'
+}
+},
+legend: {
+data: ['Your Index', 'S&P 500'],
+textStyle: {
+color: '#fff'
+},
+top: 0
+},
+grid: {
+left: '3%',
+right: '3%',
+bottom: '3%',
+top: '40px',
+containLabel: true
+},
+xAxis: {
+type: 'category',
+boundaryGap: false,
+data: ['Jun 2020', 'Dec 2020', 'Jun 2021', 'Dec 2021', 'Jun 2022', 'Dec 2022', 'Jun 2023', 'Dec 2023', 'Jun 2024', 'Dec 2024', 'Jun 2025'],
+axisLine: {
+lineStyle: {
+color: 'rgba(255, 255, 255, 0.2)'
+}
+},
+axisLabel: {
+color: 'rgba(255, 255, 255, 0.6)'
+}
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: {
+color: 'rgba(255, 255, 255, 0.2)'
+}
+},
+splitLine: {
+lineStyle: {
+color: 'rgba(255, 255, 255, 0.1)'
+}
+},
+axisLabel: {
+color: 'rgba(255, 255, 255, 0.6)',
+formatter: '{value}%'
+}
+},
+series: [
+{
+name: 'Your Index',
+type: 'line',
+data: [0, 15, 35, 48, 30, 42, 65, 85, 100, 115, 127.8],
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)',
+width: 3
+},
+symbol: 'none',
+smooth: true,
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.3)'
+},
+{
+offset: 1,
+color: 'rgba(87, 181, 231, 0.05)'
+}
+])
+}
+},
+{
+name: 'S&P 500',
+type: 'line',
+data: [0, 10, 22, 35, 25, 30, 45, 60, 70, 85, 95],
+lineStyle: {
+color: 'rgba(141, 211, 199, 1)',
+width: 3
+},
+symbol: 'none',
+smooth: true,
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+{
+offset: 0,
+color: 'rgba(141, 211, 199, 0.3)'
+},
+{
+offset: 1,
+color: 'rgba(141, 211, 199, 0.05)'
+}
+])
+}
+}
+]
+};
+myChart.setOption(option);
+window.addEventListener('resize', function() {
+myChart.resize();
+});
+});
+</script>
+</body>
+</html>
