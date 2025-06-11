@@ -1,0 +1,7 @@
+{
+  "name": "indexforge-site",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.33.0"
+  }
+}
