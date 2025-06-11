@@ -6,7 +6,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const DAYS = 365;
+const DAYS = 5;
 const BATCH_SIZE = 50;
 
 const toYahoo = (sym) => sym.replace('.', '-').replace('/', '-'); // BRK.A → BRK-A
