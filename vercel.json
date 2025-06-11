@@ -1,8 +1,12 @@
 {
   "crons": [
     {
-      "path": "/api/fetch-prices",
-      "schedule": "0 23 * * *"
+      "path": "/api/seed-components",   // или /api/update-components
+      "schedule": "55 20 * * 1-5"       // за ~5-10 мин до close
+    },
+    {
+      "path": "/api/fetch-prices",      // DAYS уже = 5
+      "schedule": "5 21 * * 1-5"
     }
   ]
 }
