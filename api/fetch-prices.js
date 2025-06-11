@@ -71,6 +71,9 @@ export default async function handler(req, res) {
     insertedTotal += count || 0;
   }
 
-  console.log('Skipped symbols:', skipped.join(', '));
+  console.log(`Fetch-prices finished: upserted=${insertedTotal}, skipped=${skipped.length}`);
+  if (skipped.length)
+      console.log('Skipped symbols:', skipped.join(', '));
+
   res.status(200).json({ upserted: insertedTotal, skipped: skipped.length });
 }
