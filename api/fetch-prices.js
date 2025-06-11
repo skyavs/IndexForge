@@ -14,8 +14,9 @@ const yURL = (y) =>
   `https://query1.finance.yahoo.com/v8/finance/chart/${y}?range=${DAYS}d&interval=1d`;
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST')
-    return res.status(405).json({ error: 'POST only' });
+  if (req.method !== 'POST' && req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
   const { data: comps, error: errComps } = await supabase
     .from('components')
