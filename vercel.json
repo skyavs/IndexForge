@@ -1,11 +1,21 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
   "crons": [
     {
-      "path": "/api/seed-components",   
-      "schedule": "55 20 * * 1-5"       
+      "path": "/api/seed-components",
+      "schedule": "55 20 * * 1-5"
     },
     {
-      "path": "/api/fetch-prices",      
+      "path": "/api/fetch-prices",
       "schedule": "5 21 * * 1-5"
     }
   ]
