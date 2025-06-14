@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Index Builder Platform</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#1e40af'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;family=Pacifico&amp;display=swap" rel="stylesheet"/>
+<style>
+h1 {
+font-family: 'Inter', sans-serif;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+background-color: #0f172a;
+color: #f8fafc;
+}
+h1, h2, h3, h4, .font-heading {
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+letter-spacing: -0.02em;
+}
+.text-gradient {
+background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #1D4ED8 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type="number"] {
+-moz-appearance: textfield;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 40px;
+height: 22px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #334155;
+transition: .4s;
+border-radius: 22px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 16px;
+width: 16px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #3b82f6;
+}
+input:checked + .slider:before {
+transform: translateX(18px);
+}
+.toggle-btn {
+background-color: #1e293b;
+color: #94a3b8;
+transition: all 0.3s;
+}
+.toggle-btn.active {
+background-color: #3b82f6;
+color: white;
+}
+.progress-bar {
+position: relative;
+display: flex;
+justify-content: space-between;
+counter-reset: step;
+margin-bottom: 30px;
+}
+.progress-bar::before {
+content: "";
+position: absolute;
+top: 15px;
+left: 0;
+height: 2px;
+width: 100%;
+background-color: #334155;
+z-index: 0;
+}
+.progress-step {
+position: relative;
+z-index: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.step-circle {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+background-color: #1e293b;
+color: #94a3b8;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+margin-bottom: 8px;
+}
+.progress-step.active .step-circle {
+background-color: #3b82f6;
+color: white;
+box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+.progress-step.completed .step-circle {
+background-color: #10b981;
+color: white;
+}
+.progress-step-text {
+font-size: 0.875rem;
+color: #94a3b8;
+}
+.progress-step.active .progress-step-text {
+color: white;
+}
+.glow-effect {
+box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+.custom-scrollbar::-webkit-scrollbar {
+width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #1e293b;
+border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #3b82f6;
+border-radius: 10px;
+}
+</style>
+<!-- Color Refresh: clearer, higher‑contrast palette -->
+<style id="color-refresh">
+  /* Brand & background */
+  body               { background-color:#0e1627; color:#f1f5f9; }
+  .bg-gray-900       { background-color:#0e1627 !important; }
+  .bg-gray-800       { background-color:#1e293b !important; }
+  .bg-gray-800\/90  { background-color:rgba(30,41,59,0.95) !important; }
+  .bg-gray-800\/50  { background-color:rgba(30,41,59,0.85) !important; }
+  .bg-gray-700       { background-color:#334155 !important; }
+  .text-gray-100     { color:#f8fafc !important; }
+  .text-gray-400     { color:#cbd5e1 !important; }
+  .border-gray-800   { border-color:#1e293b !important; }
+  .border-gray-700   { border-color:#334155 !important; }
+</style>
+</head>
+<body class="min-h-screen bg-[#0B1120]">
+<header class="bg-[url('https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/0e290a13f2dafb56bfb369f7e3d4d239.png')] bg-cover bg-center fixed w-full z-50 border-b border-blue-900/30">
+<nav class="container mx-auto px-6 py-2">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-4">
+<img alt="IndexForge Logo" class="w-auto max-h-6 h-auto" src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/1400095e3765872257f4b6eff389e667.png"/>
+<span class="text-xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span>
+</div>
+<div class="hidden md:flex items-center space-x-4">
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
+<a class="bg-primary text-white hover:bg-primary/90 px-4 py-2 rounded font-medium transition-all scroll-smooth" data-en="Demo" data-fr="Démo" href="#demo">Demo</a>
+<div class="relative">
+<button class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-gray-800/50 hover:bg-gray-700/50 text-gray-100 rounded" id="language-selector">
+<i class="ri-global-line"></i>
+<span id="current-language">English</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+<div class="hidden absolute right-0 mt-2 py-2 w-40 bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-lg shadow-xl" id="language-dropdown">
+<button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="en">
+<span class="w-5 h-5 flex items-center justify-center"><i class="ri-check-line language-check opacity-0"></i></span>
+<span>English</span>
+</button>
+<button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="fr">
+<span class="w-5 h-5 flex items-center justify-center"><i class="ri-check-line language-check opacity-0"></i></span>
+<span>Français</span>
+</button>
+
+</div>
+</div>
+</div>
+<button class="md:hidden text-gray-600" id="mobile-menu-button">
+<i class="ri-menu-line text-2xl"></i>
+</button>
+</div>
+<div class="md:hidden hidden" id="mobile-menu">
+<div class="py-4 space-y-4">
+<a class="block text-gray-600 hover:text-gray-900 scroll-smooth" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="block text-gray-600 hover:text-gray-900 scroll-smooth" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="block text-gray-600 hover:text-gray-900 scroll-smooth" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
+<a class="block text-primary font-medium hover:text-primary/80 scroll-smooth" data-en="Demo" data-fr="Démo" href="#demo">Demo</a>
+</div>
+</div>
+</nav>
+</header>
+<!-- Hero Section -->
+<section class="min-h-screen relative overflow-hidden bg-[url('https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/d5a51cb00ed931f2431d79e5f1044a61.jpeg')] bg-cover bg-center">
+<div class="absolute inset-0 bg-gradient-to-r from-[#0B1120] via-[#0B1120]/80 to-transparent"></div>
+<div class="container mx-auto px-6 relative min-h-screen flex items-center">
+<div class="max-w-2xl space-y-8">
+<h1 class="text-6xl font-bold text-white whitespace-nowrap font-heading" data-en="Simple. Fast. Powerful." data-fr="Simple. Rapide. Puissant.">Simple. Fast. Powerful.</h1>
+<p class="text-xl text-blue-100/80" data-en="Launch your custom financial index in just three simple steps" data-fr="Lancez votre indice financier personnalisé en seulement trois étapes simples">
+Launch your custom financial index in just three simple steps
+</p>
+<div class="flex space-x-4">
+<a class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-button font-medium transition-colors duration-200" data-en="Start Building Your Index" data-fr="Commencez à créer votre indice" href="#demo">Start Building Your Index</a>
+<a class="bg-blue-900/30 hover:bg-blue-800/40 text-blue-100 border border-blue-700/30 px-8 py-3 rounded-button font-medium transition-colors duration-200" data-en="Learn More" data-fr="En savoir plus" href="#contact">Learn More</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-20 bg-[#0D1424]" id="features">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold text-white mb-4 font-heading" data-en="Why Choose IndexForge?" data-fr="Pourquoi choisir IndexForge ?">Why Choose IndexForge?</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="p-8 bg-[#1A1F3C] rounded-lg">
+<div class="w-12 h-12 bg-[#2B3147] rounded-full flex items-center justify-center mb-6">
+<i class="ri-flashlight-line text-2xl text-blue-400"></i>
+</div>
+<h3 class="text-xl font-semibold text-white mb-3" data-en="Lightning Fast" data-fr="Ultra rapide">Lightning Fast</h3>
+<p class="text-gray-400" data-en="Create and launch your custom index in minutes, not months. Our platform eliminates the traditional development cycle." data-fr="Créez et lancez votre indice personnalisé en quelques minutes, pas en plusieurs mois. Notre plateforme supprime le cycle de développement traditionnel.">Create and launch your custom index in minutes, not months. Our platform eliminates the traditional development cycle.</p>
+</div>
+<div class="p-8 bg-[#1A1F3C] rounded-lg">
+<div class="w-12 h-12 bg-[#2B3147] rounded-full flex items-center justify-center mb-6">
+<i class="ri-code-box-line text-2xl text-blue-400"></i>
+</div>
+<h3 class="text-xl font-semibold text-white mb-3" data-en="No Coding Required" data-fr="Aucune programmation requise">No Coding Required</h3>
+<p class="text-gray-400" data-en="Our intuitive interface makes index creation accessible to everyone, regardless of technical background." data-fr="Notre interface intuitive rend la création d’indices accessible à tous, quel que soit le niveau technique.">Our intuitive interface makes index creation accessible to everyone, regardless of technical background.</p>
+</div>
+<div class="p-8 bg-[#1A1F3C] rounded-lg">
+<div class="w-12 h-12 bg-[#2B3147] rounded-full flex items-center justify-center mb-6">
+<i class="ri-line-chart-line text-2xl text-blue-400"></i>
+</div>
+<h3 class="text-xl font-semibold text-white mb-3" data-en="Powerful Analytics" data-fr="Analytique puissante">Powerful Analytics</h3>
+<p class="text-gray-400" data-en="Backtest your index with historical data and optimize performance with our advanced analytics tools." data-fr="Testez votre indice avec des données historiques et optimisez les performances grâce à nos outils d’analyse avancés.">Backtest your index with historical data and optimize performance with our advanced analytics tools.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Demo Section -->
+<section class="py-20 bg-[#0B1120]" id="demo">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold text-white mb-4 font-heading" data-en="Product Roadmap" data-fr="Feuille de route du produit">Try Our Index Builder</h2>
+<p class="text-xl text-gray-600" data-en="Our vision for expanding IndexForge capabilities" data-fr="Notre vision pour développer les capacités d’IndexForge">Experience the power of IndexForge with our interactive demo</p>
+</div>
+<main class="container mx-auto px-6 py-8">
+<div class="progress-bar mb-10 px-10">
+<div class="progress-step active" data-step="1">
+<div class="step-circle">1</div>
+<div class="progress-step-text" data-en="Define &amp; Backtest" data-fr="Définir &amp; Backtester">Define &amp; Backtest</div>
+</div>
+<div class="progress-step" data-step="2">
+<div class="step-circle">2</div>
+<div class="progress-step-text" data-en="Analyze Results" data-fr="Analyser les Résultats">Analyze Results</div>
+</div>
+<div class="progress-step" data-step="3">
+<div class="step-circle">3</div>
+<div class="progress-step-text" data-en="Prepare Launch" data-fr="Préparer le Lancement">Prepare Launch</div>
+</div>
+</div>
+<div class="step-content" id="step-1">
+<!-- Components selection panel -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Model Configuration Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800 flex flex-col h-full">
+<h2 class="text-xl font-semibold mb-6" data-en="Model Configuration" data-fr="Configuration du Modèle">Model Configuration</h2>
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Index Model Type" data-fr="Type de Modèle d'Indice">Index Model Type</label>
+<div class="relative">
+<select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="model-type">
+<option data-en="Price Weighted" data-fr="Pondéré par Prix" value="price-weighted">Price Weighted</option>
+<option data-en="Equal Weighted" data-fr="Pondération Égale" value="equal-weighted">Equal Weighted</option>
+<option data-en="User Defined" data-fr="Défini par l'Utilisateur" value="user-defined">User Defined</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="hidden" id="equal-weighted-params">
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Initial Date" data-fr="Date Initiale">Initial Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="initial-date" type="date"/>
+</div>
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Initial Index Value" data-fr="Valeur Initiale de l'Indice">Initial Index Value</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="initial-value" type="number" value="100"/>
+</div>
+</div>
+<div class="hidden" id="user-defined-params">
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Divisor Type" data-fr="Type de Diviseur">Divisor Type</label>
+<div class="relative">
+<select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="divisor-type">
+<option data-en="Fixed Value" data-fr="Valeur Fixe" value="fixed">Fixed Value</option>
+<option data-en="Normalized to Date" data-fr="Normalisé à la Date" value="normalized">Normalized to Date</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="mb-6" id="fixed-divisor">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Divisor Value" data-fr="Valeur du Diviseur">Divisor Value</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="divisor-value" type="number" value="1"/>
+</div>
+<div class="mb-6 hidden" id="normalized-divisor">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Normalization Date" data-fr="Date de Normalisation">Normalization Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="normalization-date" type="date"/>
+</div>
+</div>
+<div class="mt-auto">
+<div class="border-t border-gray-800 pt-6 mb-6">
+<h3 class="text-lg font-medium mb-4" data-en="Backtesting Period" data-fr="Période de Backtesting">Backtesting Period</h3>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Start Date" data-fr="Date de Début">Start Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="start-date" type="date"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="End Date" data-fr="Date de Fin">End Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="end-date" type="date"/>
+</div>
+</div>
+<div class="flex space-x-2">
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="1Y">1Y</button>
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="3Y">3Y</button>
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="5Y">5Y</button>
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="MAX">MAX</button>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200 flex items-center justify-center" id="run-backtest">
+<i class="ri-play-circle-line mr-2"></i>
+<span data-en="Run Backtest" data-fr="Lancer le Backtest">Run Backtest</span>
+</button>
+</div>
+</div>
+<!-- Available Components Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800">
+<h2 class="text-xl font-semibold mb-6" data-en="Available Components" data-fr="Composants Disponibles">Available Components</h2>
+<div class="mb-4">
+<div class="relative">
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-primary" data-en-placeholder="Search by symbol or name..." data-fr-placeholder="Rechercher par symbole ou nom..." id="component-search" placeholder="Search by symbol or name..." type="text"/>
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<i class="ri-search-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="mb-4 flex flex-wrap gap-2">
+<div class="relative">
+<select class="bg-gray-800 border border-gray-700 rounded text-white py-1 px-3 pr-8 appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-primary" id="sector-filter">
+<option data-en="All Sectors" data-fr="Tous les Secteurs" value="">All Sectors</option>
+<option data-en="Technology" data-fr="Technologie" value="technology">Technology</option>
+<option data-en="Finance" data-fr="Finance" value="finance">Finance</option>
+<option data-en="Healthcare" data-fr="Santé" value="healthcare">Healthcare</option>
+<option data-en="Consumer" data-fr="Consommation" value="consumer">Consumer</option>
+<option data-en="Energy" data-fr="Énergie" value="energy">Energy</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400 text-sm"></i>
+</div>
+</div>
+<div class="relative">
+<select class="bg-gray-800 border border-gray-700 rounded text-white py-1 px-3 pr-8 appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-primary" id="region-filter">
+<option data-en="All Regions" data-fr="Toutes les Régions" value="">All Regions</option>
+<option data-en="North America" data-fr="Amérique du Nord" value="north-america">North America</option>
+<option data-en="Europe" data-fr="Europe" value="europe">Europe</option>
+<option data-en="Asia Pacific" data-fr="Asie-Pacifique" value="asia-pacific">Asia Pacific</option>
+<option data-en="Emerging Markets" data-fr="Marchés Émergents" value="emerging">Emerging Markets</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400 text-sm"></i>
+</div>
+</div>
+</div>
+<div class="mb-4 flex justify-between">
+<button class="text-sm text-primary hover:text-blue-400 font-medium" data-en="Select All" data-fr="Sélectionner Tout" id="select-all">Select All</button>
+<button class="text-sm text-gray-400 hover:text-gray-300 font-medium" data-en="Clear All" data-fr="Effacer Tout" id="clear-all">Clear All</button>
+</div>
+<div class="h-[400px] overflow-y-auto custom-scrollbar">
+<div class="space-y-2" id="available-components">
+<!-- Component items will be generated by JavaScript -->
+</div>
+</div>
+</div>
+<!-- Selected Components Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-semibold" data-en="Selected Components" data-fr="Composants Sélectionnés">Selected Components</h2>
+<div class="flex items-center gap-3">
+<div class="bg-gray-800 px-3 py-1 rounded-full">
+<span class="text-sm text-gray-400" data-en="Selected:" data-fr="Sélectionnés:">Selected:</span>
+<span class="text-white font-medium" id="selected-count">0</span>
+</div>
+</div>
+</div>
+<div class="hidden mb-6" id="weight-type-toggle">
+<div class="text-sm font-medium text-gray-400 mb-2" data-en="Input Type" data-fr="Type de Saisie">Input Type</div>
+<div class="flex bg-gray-800 rounded-full p-1">
+<button class="weight-toggle weights-toggle active flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap" data-en="Weights (%)" data-fr="Poids (%)">Weights (%)</button>
+<button class="weight-toggle amounts-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap" data-en="Amounts" data-fr="Montants">Amounts</button>
+</div>
+</div>
+<div class="flex gap-3 mb-6">
+<button class="flex-1 bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200 flex items-center justify-center gap-2" id="import-csv">
+<i class="ri-upload-2-line"></i>
+<span data-en="Import CSV" data-fr="Importer CSV">Import CSV</span>
+</button>
+<button class="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200 flex items-center justify-center gap-2" id="download-template">
+<i class="ri-download-2-line"></i>
+<span data-en="Template" data-fr="Modèle">Template</span>
+</button>
+</div>
+<input accept=".csv" class="hidden" id="csv-file-input" type="file"/>
+<div class="text-center py-10 text-gray-400" data-en="No components selected. Add components from the available list." data-fr="Aucun composant sélectionné. Ajoutez des composants depuis la liste disponible." id="selected-components-empty">
+No components selected. Add components from the available list.
+</div>
+<div class="hidden" id="selected-components-container">
+<div class="mb-4 flex justify-between items-center">
+<div class="text-sm font-medium text-gray-400">
+<span data-en="Total Weight:" data-fr="Poids Total:">Total Weight:</span> <span class="text-white" id="total-weight">0%</span>
+</div>
+<div class="flex items-center">
+<div class="w-3 h-3 rounded-full bg-red-500 mr-2" id="weight-status"></div>
+<span class="text-sm text-red-500" data-en="Total must be 100%" data-fr="Le total doit être 100%" id="weight-message">Total must be 100%</span>
+</div>
+</div>
+<div class="h-[400px] overflow-y-auto custom-scrollbar">
+<div class="space-y-3" id="selected-components">
+<!-- Selected component items will be generated by JavaScript -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="step-content hidden" id="step-2">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Chart Controls Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800">
+<h2 class="text-xl font-semibold mb-6" data-en="Chart Controls" data-fr="Contrôles du Graphique">Chart Controls</h2>
+<div class="mb-6">
+<div class="text-sm font-medium text-gray-400 mb-2" data-en="Display Mode" data-fr="Mode d'Affichage">Display Mode</div>
+<div class="flex bg-gray-800 rounded-full p-1 mb-4">
+<button class="chart-toggle normalize-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap toggle-btn" data-en="Normalize to 100" data-fr="Normaliser à 100">Normalize to 100</button>
+<button class="chart-toggle absolute-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap active bg-primary" data-en="Absolute" data-fr="Absolu">Absolute</button>
+</div>
+<div class="flex bg-gray-800 rounded-full p-1 mb-4">
+<button class="chart-toggle return-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap toggle-btn" data-en="Return %" data-fr="Rendement %">Return %</button>
+<button class="chart-toggle level-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap active bg-primary" data-en="Level" data-fr="Niveau">Level</button>
+</div>
+<div class="flex bg-gray-800 rounded-full p-1">
+<button class="chart-toggle arithmetic-toggle active flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap bg-primary" data-en="Arithmetic" data-fr="Arithmétique">Arithmetic</button>
+<button class="chart-toggle logarithmic-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap toggle-btn" data-en="Logarithmic" data-fr="Logarithmique">Logarithmic</button>
+</div>
+</div>
+<div class="mb-6">
+<div class="text-sm font-medium text-gray-400 mb-2" data-en="Series" data-fr="Séries">Series</div>
+<div class="space-y-2">
+<div class="flex items-center">
+<input class="hidden" id="show-custom-index" type="checkbox"/>
+<label class="flex items-center cursor-pointer" for="show-custom-index">
+<span class="w-4 h-4 inline-block mr-2 rounded border border-gray-400 flex-shrink-0 relative">
+<span class="absolute inset-0 hidden bg-primary rounded-sm" id="show-custom-index-indicator"></span>
+</span>
+<span class="text-sm" data-en="Custom Index" data-fr="Indice Personnalisé">Custom Index</span>
+</label>
+</div>
+<div class="flex items-center">
+<input checked="" class="hidden" id="show-sp500" type="checkbox"/>
+<label class="flex items-center cursor-pointer" for="show-sp500">
+<span class="w-4 h-4 inline-block mr-2 rounded border border-gray-400 flex-shrink-0 relative">
+<span class="absolute inset-0 hidden bg-blue-400 rounded-sm" id="show-sp500-indicator"></span>
+</span>
+<span class="text-sm">S&amp;P 500</span>
+</label>
+</div>
+<div class="flex items-center">
+<input checked="" class="hidden" id="show-nasdaq" type="checkbox"/>
+<label class="flex items-center cursor-pointer" for="show-nasdaq">
+<span class="w-4 h-4 inline-block mr-2 rounded border border-gray-400 flex-shrink-0 relative">
+<span class="absolute inset-0 hidden bg-green-400 rounded-sm" id="show-nasdaq-indicator"></span>
+</span>
+<span class="text-sm">NASDAQ</span>
+</label>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-6">
+<h3 class="text-lg font-medium mb-4" data-en="Key Metrics" data-fr="Métriques Clés">Key Metrics</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Returns (1Y)" data-fr="Rendements (1A)">Returns (1Y)</div>
+<div class="text-lg font-semibold text-green-400">+24.8%</div>
+</div>
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Volatility" data-fr="Volatilité">Volatility</div>
+<div class="text-lg font-semibold">18.2%</div>
+</div>
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Sharpe Ratio" data-fr="Ratio de Sharpe">Sharpe Ratio</div>
+<div class="text-lg font-semibold">1.36</div>
+</div>
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Max Drawdown" data-fr="Drawdown Max">Max Drawdown</div>
+<div class="text-lg font-semibold text-red-400">-12.4%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chart Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800 lg:col-span-2">
+<h2 class="text-xl font-semibold mb-6" data-en="Performance Analysis" data-fr="Analyse de Performance">Performance Analysis</h2>
+<div class="w-full h-[500px] flex-grow" id="performance-chart"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+<div class="bg-gray-800 p-4 rounded">
+<div class="text-sm text-gray-400 mb-1" data-en="Returns" data-fr="Rendements">Returns</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<div class="text-xs text-gray-400" data-en="1M" data-fr="1M">1M</div>
+<div class="text-sm font-medium text-green-400">+3.2%</div>
+</div>
+<div>
+<div class="text-xs text-gray-400" data-en="3M" data-fr="3M">3M</div>
+<div class="text-sm font-medium text-green-400">+8.7%</div>
+</div>
+<div>
+<div class="text-xs text-gray-400" data-en="1Y" data-fr="1A">1Y</div>
+<div class="text-sm font-medium text-green-400">+24.8%</div>
+</div>
+<div>
+<div class="text-xs text-gray-400" data-en="YTD" data-fr="YTD">YTD</div>
+<div class="text-sm font-medium text-green-400">+16.3%</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-800 p-4 rounded">
+<div class="text-sm text-gray-400 mb-1" data-en="Risk Metrics" data-fr="Métriques de Risque">Risk Metrics</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="Beta" data-fr="Bêta">Beta</div>
+<div class="text-sm font-medium">0.92</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="Alpha" data-fr="Alpha">Alpha</div>
+<div class="text-sm font-medium text-green-400">2.4%</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="R²" data-fr="R²">R²</div>
+<div class="text-sm font-medium">0.87</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-800 p-4 rounded">
+<div class="text-sm text-gray-400 mb-1" data-en="Benchmark Comparison" data-fr="Comparaison avec Benchmark">Benchmark Comparison</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="vs S&amp;P 500" data-fr="vs S&amp;P 500">vs S&amp;P 500</div>
+<div class="text-sm font-medium text-green-400">+5.2%</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="vs NASDAQ" data-fr="vs NASDAQ">vs NASDAQ</div>
+<div class="text-sm font-medium text-red-400">-1.8%</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="Tracking Error" data-fr="Erreur de Suivi">Tracking Error</div>
+<div class="text-sm font-medium">3.4%</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="step-content hidden" id="step-3">
+<div class="max-w-3xl mx-auto bg-gray-900 rounded p-8 border border-gray-800">
+<h2 class="text-2xl font-semibold mb-8 text-center" data-en="Prepare Index for Launch" data-fr="Préparer l'Indice pour le Lancement">Prepare Index for Launch</h2>
+<div class="mb-8">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Index Name" data-fr="Nom de l'Indice">Index Name</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" data-en-placeholder="e.g. Tech Leaders Index" data-fr-placeholder="ex. Indice des Leaders Technologiques" id="index-name" placeholder="e.g. Tech Leaders Index" type="text"/>
+</div>
+<div class="mb-8">
+<h3 class="text-lg font-medium mb-4" data-en="Calculation Schedule" data-fr="Calendrier de Calcul">Calculation Schedule</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Calculation Time" data-fr="Heure de Calcul">Calculation Time</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="calc-time" type="time"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Timezone" data-fr="Fuseau Horaire">Timezone</label>
+<div class="relative">
+<select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="timezone">
+<option value="UTC">UTC</option>
+<option value="EST">EST (UTC-5)</option>
+<option value="CET">CET (UTC+1)</option>
+<option value="JST">JST (UTC+9)</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-4">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Calculation Days" data-fr="Jours de Calcul">Calculation Days</label>
+<div class="flex flex-wrap gap-2">
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="mon"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Mon" data-fr="Lun">Mon</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="tue"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Tue" data-fr="Mar">Tue</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="wed"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Wed" data-fr="Mer">Wed</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="thu"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Thu" data-fr="Jeu">Thu</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="fri"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Fri" data-fr="Ven">Fri</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input class="hidden" type="checkbox" value="sat"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Sat" data-fr="Sam">Sat</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input class="hidden" type="checkbox" value="sun"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Sun" data-fr="Dim">Sun</span>
+</label>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-lg font-medium mb-4" data-en="Calculation Frequency" data-fr="Fréquence de Calcul">Calculation Frequency</h3>
+<div class="flex flex-wrap gap-3 mb-4">
+<label class="frequency-radio flex items-center bg-gray-800 px-4 py-2 rounded cursor-pointer">
+<input checked="" class="hidden" name="frequency" type="radio" value="eod"/>
+<span class="radio-indicator w-4 h-4 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="End of Day" data-fr="Fin de Journée">End of Day</span>
+</label>
+<label class="frequency-radio flex items-center bg-gray-800 px-4 py-2 rounded cursor-pointer">
+<input class="hidden" name="frequency" type="radio" value="hourly"/>
+<span class="radio-indicator w-4 h-4 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Hourly" data-fr="Horaire">Hourly</span>
+</label>
+<label class="frequency-radio flex items-center bg-gray-800 px-4 py-2 rounded cursor-pointer">
+<input class="hidden" name="frequency" type="radio" value="realtime"/>
+<span class="radio-indicator w-4 h-4 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Real-time" data-fr="Temps Réel">Real-time</span>
+</label>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-lg font-medium mb-4" data-en="Distribution Settings" data-fr="Paramètres de Distribution">Distribution Settings</h3>
+<div class="space-y-3">
+<label class="flex items-center justify-between">
+<span class="text-sm" data-en="Email Notifications" data-fr="Notifications par Email">Email Notifications</span>
+<label class="custom-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</label>
+<label class="flex items-center justify-between">
+<span class="text-sm" data-en="API Access" data-fr="Accès API">API Access</span>
+<label class="custom-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</label>
+<label class="flex items-center justify-between">
+<span class="text-sm" data-en="Public Dashboard" data-fr="Tableau de Bord Public">Public Dashboard</span>
+<label class="custom-switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</label>
+</div>
+</div>
+<div class="mb-8 bg-gray-800 p-4 rounded">
+<h3 class="text-lg font-medium mb-3" data-en="Final Review" data-fr="Révision Finale">Final Review</h3>
+<div class="space-y-2">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-400 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<span class="text-sm" data-en="Index model and components validated" data-fr="Modèle d'indice et composants validés">Index model and components validated</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-400 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<span class="text-sm" data-en="Backtesting results reviewed" data-fr="Résultats de backtesting examinés">Backtesting results reviewed</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-400 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<span class="text-sm" data-en="Calculation schedule configured" data-fr="Calendrier de calcul configuré">Calculation schedule configured</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-400 mr-2">
+<i class="ri-error-warning-line"></i>
+</div>
+<span class="text-sm" data-en="Data subscription required for real-time calculation" data-fr="Abonnement aux données requis pour le calcul en temps réel">Data subscription required for real-time calculation</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-gray-700 cursor-not-allowed text-gray-400 font-medium py-3 px-4 rounded-button transition-colors duration-200 flex items-center justify-center" disabled="" id="launch-index">
+<i class="ri-rocket-line mr-2"></i>
+<span data-en="Launch Index (Coming Soon)" data-fr="Lancer l'Indice (Bientôt Disponible)">Launch Index (Coming Soon)</span>
+</button>
+</div>
+</div>
+<div class="mt-10 flex justify-between">
+<button class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-button transition-colors duration-200 flex items-center justify-center opacity-50 cursor-not-allowed" id="prev-step">
+<i class="ri-arrow-left-line mr-2"></i>
+<span data-en="Previous" data-fr="Précédent">Previous</span>
+</button>
+<button class="bg-primary hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-button transition-colors duration-200 flex items-center justify-center" id="next-step">
+<span data-en="Next" data-fr="Suivant">Next</span>
+<i class="ri-arrow-right-line ml-2"></i>
+</button>
+</div>
+</main>
+<!-- About & Team Section -->
+<section class="py-20 bg-[#0D1424]" id="team">
+<div class="container mx-auto px-6">
+<div class="grid lg:grid-cols-2 gap-16 items-start">
+<div class="space-y-6">
+<div>
+<h2 class="text-3xl font-bold text-white mb-4 font-heading" data-en="About IndexForge" data-fr="À propos d’IndexForge">About IndexForge</h2>
+<p class="text-lg text-blue-100/80" data-en="IndexForge empowers financial professionals to design and launch custom indices without coding or infrastructure overhead. What once took months can now be done in minutes." data-fr="IndexForge permet aux professionnels de la finance de concevoir et lancer des indices personnalisés sans codage ni infrastructure.">IndexForge empowers financial professionals to design and launch custom indices without coding or infrastructure overhead. What once took months can now be done in minutes.</p>
+</div>
+<div class="bg-blue-900/20 border border-blue-900/30 rounded-lg p-4">
+<p class="text-blue-100/90 italic text-base" data-en="IndexForge is now being incubated in France and aspires to become part of the French FinTech ecosystem." data-fr="IndexForge est actuellement incubé en France et aspire à rejoindre l’écosystème FinTech français.">IndexForge is now being incubated in France and aspires to become part of the French FinTech ecosystem.</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-tools-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Intuitive Design Tools" data-fr="Outils de conception intuitifs">Intuitive Design Tools</h3>
+<p class="text-blue-100/80" data-en="Intuitive index design tools that require no programming knowledge" data-fr="Des outils de conception d’indices intuitifs ne nécessitant aucune connaissance en programmation">Intuitive index design tools that require no programming knowledge</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-line-chart-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Real-time Integration" data-fr="Intégration en temps réel">Real-time Integration</h3>
+<p class="text-blue-100/80" data-en="Real-time data integration from leading financial data providers" data-fr="Intégration de données en temps réel provenant des principaux fournisseurs de données financières">Real-time data integration from leading financial data providers</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-calculator-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Automated Calculation" data-fr="Calcul automatisé">Automated Calculation</h3>
+<p class="text-blue-100/80" data-en="Automated calculation engines with institutional-grade accuracy" data-fr="Moteurs de calcul automatisés avec une précision de niveau institutionnel">Automated calculation engines with institutional-grade accuracy</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-shield-check-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Comprehensive Compliance" data-fr="Conformité complète">Comprehensive Compliance</h3>
+<p class="text-blue-100/80" data-en="Comprehensive compliance and regulatory reporting tools" data-fr="Outils complets de conformité et de reporting réglementaire">Comprehensive compliance and regulatory reporting tools</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-3xl font-bold text-white mb-8 font-heading" data-en="Meet Our Team" data-fr="Rencontrez notre équipe">Meet Our Team</h2>
+<div class="grid gap-8">
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30">
+<div class="flex items-start gap-6">
+<img alt="Michael Reynaud" class="w-40 h-40 object-cover rounded-lg max-w-full h-auto" src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/ca15a7aee49a0a4e6ae6b981f008d20b.png"/>
+<div>
+<h3 class="text-xl font-semibold text-white mb-2">Michael Reynaud</h3>
+<p class="text-blue-400 mb-3">CEO &amp; Founder</p>
+<p class="text-blue-100/80" data-en="Former quantitative analyst with 15 years of experience in index development at major financial institutions." data-fr="Ancien analyste quantitatif avec 15 ans d’expérience dans le développement d’indices pour de grandes institutions financières.">Former quantitative analyst with 15 years of experience in index development at major financial institutions.</p>
+</div>
+</div>
+</div>
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30">
+<div class="flex items-start gap-6">
+<img alt="Thomas Laurent" class="w-40 h-40 object-cover rounded-lg max-w-full h-auto" src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/ca15a7aee49a0a4e6ae6b981f008d20b.png"/>
+<div>
+<h3 class="text-xl font-semibold text-white mb-2">Thomas Laurent</h3>
+<p class="text-blue-400 mb-3">CTO &amp; Co-founder</p>
+<p class="text-blue-100/80" data-en="Tech innovator with expertise in financial data systems and machine learning applications in finance." data-fr="Innovateur technologique spécialisé dans les systèmes de données financières et l’IA appliquée à la finance.">Tech innovator with expertise in financial data systems and machine learning applications in finance.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Roadmap Section -->
+<section class="py-20 bg-[#0B1120]">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold text-white mb-4 font-heading">Product Roadmap</h2>
+<p class="text-xl text-blue-100/80">Our vision for expanding IndexForge capabilities</p>
+</div>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 h-full w-px bg-blue-900/30"></div>
+<div class="space-y-24">
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 -top-3">
+<div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
+</div>
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<div class="md:text-right md:pr-16">
+<div class="inline-flex items-center gap-2 text-blue-400 mb-3">
+<i class="ri-scales-3-line text-xl"></i>
+<span class="font-medium">Q4 2025</span>
+</div>
+<h3 class="text-2xl font-semibold text-white mb-3" data-en="Expanded Index Model Support" data-fr="Prise en charge étendue des modèles d’indice">Expanded Index Model Support</h3>
+<p class="text-blue-100/80" data-en="Enhancing flexibility and control with multiple index calculation models including user-defined logic." data-fr="Plus de flexibilité et de contrôle avec divers modèles de calcul, y compris la logique personnalisée.">Enhancing flexibility and control with multiple index calculation models including user-defined logic.</p>
+</div>
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30 md:ml-16">
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Market capitalization weighting" data-fr="Pondération par capitalisation boursière">Market capitalization weighting</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Float adjustment capabilities" data-fr="Capacités d’ajustement du flottant">Float adjustment capabilities</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Capping and sector constraints" data-fr="Limites de pondération et contraintes sectorielles">Capping and sector constraints</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 -top-3">
+<div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
+</div>
+<div class="grid md:grid-cols-2 gap-8 items-center"><div class="md:text-right md:pr-16">
+<div class="inline-flex items-center gap-2 text-blue-400 mb-3">
+<i class="ri-database-2-line text-xl"></i>
+<span class="font-medium">Q1 2026</span>
+</div>
+<h3 class="text-2xl font-semibold text-white mb-3" data-en="Live Data Feeds Integration" data-fr="Intégration de flux de données en temps réel">Live Data Feeds Integration</h3>
+<p class="text-blue-100/80" data-en="Connecting to real-time market data sources to ensure accurate and timely index valuation." data-fr="Connexion aux sources de données de marché en temps réel pour une valorisation précise et à jour.">Connecting to real-time market data sources to ensure accurate and timely index valuation.</p>
+</div><div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30 md:ml-16">
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30">
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Multiple data vendor support" data-fr="Support de plusieurs fournisseurs de données">Multiple data vendor support</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Real-time price updates" data-fr="Mises à jour des prix en temps réel">Real-time price updates</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Corporate action processing" data-fr="Traitement des événements d’entreprise">Corporate action processing</span>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 -top-3">
+<div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
+</div>
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<div class="md:text-right md:pr-16">
+<div class="inline-flex items-center gap-2 text-blue-400 mb-3">
+<i class="ri-rocket-line text-xl"></i>
+<span class="font-medium">Q2 2026</span>
+</div>
+<h3 class="text-2xl font-semibold text-white mb-3" data-en="Real-Time Index Launch" data-fr="Lancement d’indices en temps réel">Real-Time Index Launch</h3>
+<p class="text-blue-100/80" data-en="Moving beyond backtesting to enable actual index publication with scheduled price updates." data-fr="Passer du backtesting à la publication réelle d’indices avec des mises à jour planifiées.">Moving beyond backtesting to enable actual index publication with scheduled price updates.</p>
+</div>
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30 md:ml-16">
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Automated calculation engine" data-fr="Moteur de calcul automatisé">Automated calculation engine</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Distribution to data vendors" data-fr="Distribution aux fournisseurs de données">Distribution to data vendors</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Index governance framework" data-fr="Cadre de gouvernance des indices">Index governance framework</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 -top-3">
+<div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
+</div>
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<div class="md:text-right md:pr-16">
+<div class="inline-flex items-center gap-2 text-blue-400 mb-3">
+<i class="ri-brain-line text-xl"></i>
+<span class="font-medium">Q3 2026</span>
+</div>
+<h3 class="text-2xl font-semibold text-white mb-3" data-en="AI-Powered Index Design" data-fr="Conception d’indices par l’IA">AI-Powered Index Design</h3>
+<p class="text-blue-100/80" data-en="Leveraging AI and natural language processing to simplify model creation and enhance index performance." data-fr="Utilisation de l’IA et du traitement du langage pour simplifier la création et améliorer les performances.">Leveraging AI and natural language processing to simplify model creation and enhance index performance.</p>
+</div>
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30 md:ml-16">
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Model generation using NLP prompts" data-fr="Génération de modèles via des invites NLP">Model generation using NLP prompts</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="AI-driven index optimization" data-fr="Optimisation des indices par l’IA">AI-driven index optimization</span>
+</div>
+<div class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-checkbox-circle-line text-blue-400"></i>
+<span data-en="Semantic tagging and classification of components" data-fr="Étiquetage sémantique et classification des composants">Semantic tagging and classification of components</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-20 bg-[#0B1120]" id="contact">
+<div class="container mx-auto px-6">
+<div class="max-w-4xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold text-white mb-4 font-heading" data-en="Get in Touch" data-fr="Nous contacter">Get in Touch</h2>
+<p class="text-xl text-blue-100/80" data-en="Ready to revolutionize your index management?" data-fr="Prêt à révolutionner votre gestion d’indices ?">Ready to revolutionize your index management?</p>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-[#1A1F3C] p-8 rounded-lg border border-blue-900/30 backdrop-blur-sm">
+<h3 class="text-xl font-semibold text-white mb-6" data-en="Contact Information" data-fr="Coordonnées">Contact Information</h3>
+<div class="space-y-6">
+<div class="flex items-center">
+<div class="w-10 h-10 bg-blue-900/30 rounded-full flex items-center justify-center mr-4">
+<i class="ri-mail-line text-xl text-blue-400"></i>
+</div>
+<div>
+<p class="text-white font-medium" data-en="Email" data-fr="Email">Email</p>
+<p class="text-blue-100/80">contact@indexforge.com</p>
+</div>
+</div>
+<div class="mt-8 space-y-4">
+<p class="text-lg text-white font-medium" data-en="We're happy to:" data-fr="Nous serions ravis de :">We're happy to:</p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-presentation-line text-blue-400"></i>
+<span data-en="Walk you through a personalized demo" data-fr="Vous proposer une démonstration personnalisée">Walk you through a personalized demo</span>
+</li>
+<li class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-discuss-line text-blue-400"></i>
+<span data-en="Discuss your use case and pricing" data-fr="Discuter de votre cas d’usage et des tarifs">Discuss your use case and pricing</span>
+</li>
+<li class="flex items-center gap-3 text-blue-100/80">
+<i class="ri-team-line text-blue-400"></i>
+<span data-en="Explore collaboration opportunities" data-fr="Explorer des opportunités de collaboration">Explore collaboration opportunities</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<form class="bg-[#1A1F3C] p-8 rounded-lg border border-blue-900/30 backdrop-blur-sm">
+<div class="mb-6">
+<label class="block text-sm font-medium text-white mb-2" data-en="Name" data-fr="Nom">Name</label>
+<input class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-primary" required="" type="text"/>
+</div>
+<div class="mb-6">
+<label class="block text-sm font-medium text-white mb-2" data-en="Email" data-fr="Email">Email</label>
+<input class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-primary" required="" type="email"/>
+</div>
+<div class="mb-6">
+<label class="block text-sm font-medium text-white mb-2" data-en="Message" data-fr="Message">Message</label>
+<textarea class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-primary h-32" required=""></textarea>
+</div>
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200" data-en="Send Message" data-fr="Envoyer le message" type="submit">
+Send Message
+</button>
+</form>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#0D1424] text-gray-400 py-12">
+<div class="container mx-auto px-6">
+<div class="grid md:grid-cols-4 gap-8">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<img alt="IndexForge Logo" class="max-w-full max-h-6 h-auto" src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/1400095e3765872257f4b6eff389e667.png"/>
+<span class="text-2xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span>
+</div>
+<p class="text-sm" data-en="Building the future of index management technology." data-fr="Construire l’avenir de la technologie de gestion d’indices.">Building the future of index management technology.</p>
+</div>
+<div>
+<h4 class="text-white font-medium mb-4" data-en="Product" data-fr="Produit">Product</h4>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-white" data-en="Features" data-fr="Fonctionnalités" href="#features">Features</a></li>
+<li><a class="hover:text-white" data-en="Demo" data-fr="Démo" href="#demo">Demo</a></li>
+<li><a class="hover:text-white" data-en="Pricing" data-fr="Tarification" href="#">Pricing</a></li>
+<li><a class="hover:text-white" data-en="Documentation" data-fr="Documentation" href="#">Documentation</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-medium mb-4" data-en="Company" data-fr="Entreprise">Company</h4>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-white" data-en="About Us" data-fr="À propos" href="#team">About Us</a></li>
+<li><a class="hover:text-white" data-en="Careers" data-fr="Carrières" href="#">Careers</a></li>
+<li><a class="hover:text-white" data-en="Blog" data-fr="Blog" href="#">Blog</a></li>
+<li><a class="hover:text-white" data-en="Contact" data-fr="Contact" href="#contact">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-medium mb-4" data-en="Legal" data-fr="Légal">Legal</h4>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-white" data-en="Privacy Policy" data-fr="Politique de confidentialité" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white" data-en="Terms of Service" data-fr="Conditions d’utilisation" href="#">Terms of Service</a></li>
+<li><a class="hover:text-white" data-en="Security" data-fr="Sécurité" href="#">Security</a></li>
+<li><a class="hover:text-white" data-en="Compliance" data-fr="Conformité" href="#">Compliance</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+<p class="text-sm">© 2025 IndexForge. All rights reserved.</p>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="hover:text-white" href="#"><i class="ri-linkedin-fill text-xl"></i></a>
+<a class="hover:text-white" href="#"><i class="ri-twitter-fill text-xl"></i></a>
+<a class="hover:text-white" href="#"><i class="ri-github-fill text-xl"></i></a>
+</div>
+</div>
+</div>
+</footer>
+<script id="mobile-menu">
+document.addEventListener('DOMContentLoaded', function() {
+// Model type selection handling
+const modelType = document.getElementById('model-type');
+const equalWeightedParams = document.getElementById('equal-weighted-params');
+const userDefinedParams = document.getElementById('user-defined-params');
+const weightTypeToggle = document.getElementById('weight-type-toggle');
+const divisorType = document.getElementById('divisor-type');
+const fixedDivisor = document.getElementById('fixed-divisor');
+const normalizedDivisor = document.getElementById('normalized-divisor');
+modelType.addEventListener('change', function() {
+equalWeightedParams.classList.add('hidden');
+userDefinedParams.classList.add('hidden');
+weightTypeToggle.classList.add('hidden');
+switch(this.value) {
+case 'equal-weighted':
+equalWeightedParams.classList.remove('hidden');
+break;
+case 'user-defined':
+userDefinedParams.classList.remove('hidden');
+weightTypeToggle.classList.remove('hidden');
+break;
+}
+});
+// Weight type toggle handling
+const weightToggles = document.querySelectorAll('.weight-toggle');
+weightToggles.forEach(toggle => {
+toggle.addEventListener('click', function() {
+weightToggles.forEach(t => {
+t.classList.remove('active', 'bg-primary', 'text-white');
+t.classList.add('text-gray-400');
+});
+this.classList.add('active', 'bg-primary', 'text-white');
+this.classList.remove('text-gray-400');
+const isAmounts = this.classList.contains('amounts-toggle');
+const weightInputs = document.querySelectorAll('.component-weight');
+const weightLabels = document.querySelectorAll('.weight-label');
+weightInputs.forEach((input, index) => {
+if (isAmounts) {
+input.placeholder = '0.00';
+if (weightLabels[index]) weightLabels[index].textContent = '$';
+} else {
+input.placeholder = '0';
+if (weightLabels[index]) weightLabels[index].textContent = '%';
+}
+});
+});
+});
+divisorType.addEventListener('change', function() {
+if(this.value === 'fixed') {
+fixedDivisor.classList.remove('hidden');
+normalizedDivisor.classList.add('hidden');
+} else {
+fixedDivisor.classList.add('hidden');
+normalizedDivisor.classList.remove('hidden');
+}
+});
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+// Add smooth scrolling to all links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+if (targetId === '#') {
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+} else {
+document.querySelector(targetId).scrollIntoView({
+behavior: 'smooth'
+});
+}
+});
+});
+mobileMenuButton.addEventListener('click', () => {
+mobileMenu.classList.toggle('hidden');
+});
+// Close mobile menu when clicking on a link
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+link.addEventListener('click', () => {
+mobileMenu.classList.add('hidden');
+});
+});
+});
+</script>
+<script id="step-navigation">
+document.addEventListener('DOMContentLoaded', function() {
+const steps = document.querySelectorAll('.step-content');
+const progressSteps = document.querySelectorAll('.progress-step');
+const prevButton = document.getElementById('prev-step');
+const nextButton = document.getElementById('next-step');
+let currentStep = 1;
+// Initialize date inputs with today's date
+const today = new Date();
+const oneYearAgo = new Date();
+oneYearAgo.setFullYear(today.getFullYear() - 1);
+document.getElementById('initial-date').valueAsDate = oneYearAgo;
+document.getElementById('start-date').valueAsDate = oneYearAgo;
+document.getElementById('end-date').valueAsDate = today;
+document.getElementById('calc-time').value = '16:00';
+// Update navigation buttons
+function updateNavButtons() {
+if (currentStep === 1) {
+prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+} else {
+prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
+}
+if (currentStep === 3) {
+nextButton.textContent = currentLanguage === 'en' ? 'Finish' : 'Terminer';
+nextButton.innerHTML = `<span data-en="Finish" data-fr="Terminer">${currentLanguage === 'en' ? 'Finish' : 'Terminer'}</span><i class="ri-check-line ml-2"></i>`;
+} else {
+nextButton.innerHTML = `<span data-en="Next" data-fr="Suivant">${currentLanguage === 'en' ? 'Next' : 'Suivant'}</span><i class="ri-arrow-right-line ml-2"></i>`;
+}
+}
+// Show the specified step
+function showStep(stepNumber) {
+  // Dispatch a custom event when Step 1 is shown (for Supabase reload)
+  if (stepNumber === 1) {
+    window.dispatchEvent(new CustomEvent('showStep1'));
+  }
+  // Force chart resize when arriving at Step 2
+  if (stepNumber === 2) {
+    const chartDom = document.getElementById('performance-chart');
+    if (chartDom) {
+      const chart = echarts.getInstanceByDom(chartDom);
+      if (chart) {
+        chart.resize();
+        setTimeout(() => chart.resize(), 100);
+      }
+    }
+  }
+    
+steps.forEach((step, index) => {
+if (index + 1 === stepNumber) {
+step.classList.remove('hidden');
+} else {
+step.classList.add('hidden');
+}
+});
+progressSteps.forEach((step, index) => {
+if (index + 1 === stepNumber) {
+step.classList.add('active');
+step.classList.remove('completed');
+} else if (index + 1 < stepNumber) {
+step.classList.remove('active');
+step.classList.add('completed');
+} else {
+step.classList.remove('active', 'completed');
+}
+});
+currentStep = stepNumber;
+updateNavButtons();
+}
+// Next button click handler
+nextButton.addEventListener('click', () => {
+if (currentStep < 3) {
+showStep(currentStep + 1);
+} else {
+// Handle finish action
+alert(currentLanguage === 'en' ? 'Index successfully launched!' : 'Indice lancé avec succès !');
+}
+});
+// Previous button click handler
+prevButton.addEventListener('click', () => {
+if (currentStep > 1) {
+showStep(currentStep - 1);
+}
+});
+// Run backtest button click handler
+document.getElementById('run-backtest').addEventListener('click', () => {
+showStep(2);
+});
+// Period quick selectors
+document.querySelectorAll('.period-btn').forEach(btn => {
+btn.addEventListener('click', () => {
+const period = btn.dataset.period;
+const endDate = new Date();
+let startDate = new Date();
+switch (period) {
+case '1Y':
+startDate.setFullYear(endDate.getFullYear() - 1);
+break;
+case '3Y':
+startDate.setFullYear(endDate.getFullYear() - 3);
+break;
+case '5Y':
+startDate.setFullYear(endDate.getFullYear() - 5);
+break;
+case 'MAX':
+startDate = new Date(2010, 0, 1);
+break;
+}
+document.getElementById('start-date').valueAsDate = startDate;
+document.getElementById('end-date').valueAsDate = endDate;
+// Update active state
+document.querySelectorAll('.period-btn').forEach(b => {
+b.classList.remove('bg-primary', 'text-white');
+b.classList.add('bg-gray-800', 'text-gray-400');
+});
+btn.classList.remove('bg-gray-800', 'text-gray-400');
+btn.classList.add('bg-primary', 'text-white');
+});
+});
+// Initialize day checkboxes
+document.querySelectorAll('.day-checkbox').forEach(checkbox => {
+const input = checkbox.querySelector('input');
+const indicator = checkbox.querySelector('.day-indicator');
+if (input.checked) {
+indicator.classList.add('bg-primary');
+}
+checkbox.addEventListener('click', () => {
+input.checked = !input.checked;
+if (input.checked) {
+indicator.classList.add('bg-primary');
+} else {
+indicator.classList.remove('bg-primary');
+}
+});
+});
+// Initialize frequency radio buttons
+document.querySelectorAll('.frequency-radio').forEach(radio => {
+const input = radio.querySelector('input');
+const indicator = radio.querySelector('.radio-indicator');
+if (input.checked) {
+indicator.classList.add('bg-primary');
+radio.classList.add('border-primary', 'border');
+}
+radio.addEventListener('click', () => {
+// Uncheck all radios
+document.querySelectorAll('.frequency-radio input').forEach(r => {
+r.checked = false;
+});
+document.querySelectorAll('.radio-indicator').forEach(ind => {
+ind.classList.remove('bg-primary');
+});
+document.querySelectorAll('.frequency-radio').forEach(r => {
+r.classList.remove('border-primary', 'border');
+});
+// Check this radio
+input.checked = true;
+indicator.classList.add('bg-primary');
+radio.classList.add('border-primary', 'border');
+});
+});
+});
+</script>
+<script id="language-switcher">
+document.addEventListener('DOMContentLoaded', function() {
+const languageSelector = document.getElementById('language-selector');
+const languageDropdown = document.getElementById('language-dropdown');
+const currentLanguageText = document.getElementById('current-language');
+let currentLanguage = 'en';
+let currentStep = 1; // Add currentStep variable
+const languages = {
+en: 'English',
+fr: 'Français',
+es: 'Español'
+};
+function toggleDropdown() {
+const isHidden = languageDropdown.classList.contains('hidden');
+if (isHidden) {
+languageDropdown.classList.remove('hidden');
+updateCheckmarks();
+} else {
+languageDropdown.classList.add('hidden');
+}
+}
+function updateCheckmarks() {
+document.querySelectorAll('.language-check').forEach(check => {
+check.style.opacity = '0';
+});
+const activeLanguage = document.querySelector(`[data-lang="${currentLanguage}"] .language-check`);
+if (activeLanguage) {
+activeLanguage.style.opacity = '1';
+}
+}
+function switchLanguage(lang) {
+currentLanguage = lang;
+currentLanguageText.textContent = languages[lang];
+// Update all text elements with data attributes
+Object.keys(languages).forEach(langKey => {
+document.querySelectorAll(`[data-${langKey}]`).forEach(element => {
+if (element.hasAttribute(`data-${lang}`)) {
+element.textContent = element.getAttribute(`data-${lang}`);
+}
+});
+document.querySelectorAll(`[data-${langKey}-placeholder]`).forEach(element => {
+if (element.hasAttribute(`data-${lang}-placeholder`)) {
+element.placeholder = element.getAttribute(`data-${lang}-placeholder`);
+}
+});
+});
+// Update navigation buttons
+const prevButton = document.getElementById('prev-step');
+const nextButton = document.getElementById('next-step');
+// Get current step from progress bar
+const activeStep = document.querySelector('.progress-step.active');
+if (activeStep) {
+currentStep = parseInt(activeStep.getAttribute('data-step'));
+}
+if (currentStep === 3) {
+const finishText = {
+en: 'Finish',
+fr: 'Terminer',
+es: 'Finalizar'
+};
+nextButton.innerHTML = `<span>${finishText[lang]}</span><i class="ri-check-line ml-2"></i>`;
+} else {
+const nextText = {
+en: 'Next',
+fr: 'Suivant',
+es: 'Siguiente'
+};
+nextButton.innerHTML = `<span>${nextText[lang]}</span><i class="ri-arrow-right-line ml-2"></i>`;
+}
+const prevText = {
+en: 'Previous',
+fr: 'Précédent',
+es: 'Anterior'
+};
+prevButton.innerHTML = `<i class="ri-arrow-left-line mr-2"></i><span>${prevText[lang]}</span>`;
+updateCheckmarks();
+languageDropdown.classList.add('hidden');
+}
+// Event Listeners
+languageSelector.addEventListener('click', toggleDropdown);
+document.querySelectorAll('#language-dropdown button').forEach(button => {
+button.addEventListener('click', (e) => {
+const lang = e.currentTarget.getAttribute('data-lang');
+switchLanguage(lang);
+});
+});
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+if (!languageSelector.contains(e.target)) {
+languageDropdown.classList.add('hidden');
+}
+});
+// Initialize
+switchLanguage('en');
+});
+</script>
+<!-- Supabase Components Loader -->
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabaseUrl = "https://ftyfslzxtqalylwekjcv.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1OTU0NDEsImV4cCI6MjA2NTE3MTQ0MX0.7UNbOoclq4s-3M1o95-c3pmie0S5eRpXdPf1f755gbE";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  let allComponents = [];
+  const selected = new Set();
+  // Map symbol -> latest close price
+  let priceMap = {};
+
+  async function fetchLatestPrices(symbols) {
+    if (!symbols || symbols.length === 0) return;
+    try {
+      // Latest date
+      const { data: last, error: errDate } = await supabase
+        .from('daily_prices')
+        .select('trade_date')
+        .order('trade_date', { ascending: false })
+        .limit(1);
+      if (errDate) throw errDate;
+      const lastDate = last?.[0]?.trade_date;
+      if (!lastDate) return;
+
+      const { data: prices, error: errPrices } = await supabase
+        .from('daily_prices')
+        .select('symbol, close')
+        .eq('trade_date', lastDate)
+        .in('symbol', symbols);
+      if (errPrices) throw errPrices;
+
+      priceMap = {};
+      prices.forEach(p => priceMap[p.symbol] = Number(p.close));
+    } catch(e){ console.error('Price fetch error:', e); }
+  }
+
+
+  async function fetchComponents() {
+    const { data, error } = await supabase
+      .from("components")
+      .select("id, symbol, name")
+      .eq("is_active", true)
+      .order("symbol", { ascending: true });
+
+    if (error) {
+      console.error("Supabase fetch error:", error);
+      return;
+    }
+    allComponents = data;
+    await fetchLatestPrices(allComponents.map(c=>c.symbol));
+    renderComponentList();
+  }
+
+  function renderComponentList() {
+    const list = document.getElementById("available-components");
+    if (!list) return;
+    list.innerHTML = "";
+
+    const query = document.getElementById("component-search").value.toLowerCase();
+    const filtered = allComponents.filter(c =>
+      c.symbol.toLowerCase().includes(query) || c.name.toLowerCase().includes(query)
+    );
+
+    filtered.forEach(c => {
+      const card = document.createElement("div");
+      card.className = "w-full";
+      card.innerHTML = `
+        <label class="flex items-center justify-between w-full bg-gray-800 rounded-lg py-2 px-3 hover:bg-gray-700 cursor-pointer">
+          <div class="flex items-center">
+            <input id="checkbox-${c.id}" type="checkbox" class="form-checkbox h-4 w-4 text-primary mr-3 checkbox-selection" ${selected.has(c.id) ? 'checked' : ''}>
+            <span class="truncate"><span class="font-semibold">${c.symbol}</span>&nbsp;${c.name}</span>
+          </div>
+          <div class="ml-4 text-gray-400 text-sm">${priceMap[c.symbol] !== undefined ? '$'+priceMap[c.symbol].toFixed(2) : '--'}</div>
+        </label>
+`;
+      const checkbox = card.querySelector("input");
+      checkbox.addEventListener("change", e => {
+        if (e.target.checked) {
+          selected.add(c.id);
+        renderSelectedComponents();
+      } else {
+          selected.delete(c.id);
+        renderSelectedComponents();
+      }
+      });
+      list.appendChild(card);
+    });
+  }
+  function renderSelectedComponents() {
+    const list = document.getElementById('selected-components');
+    const emptyState = document.getElementById('selected-components-empty');
+    const container = document.getElementById('selected-components-container');
+    const countEl = document.getElementById('selected-count');
+    if (!list) return;
+    list.innerHTML = '';
+    selected.forEach(id => {
+      const comp = allComponents.find(c => c.id === id);
+      if (!comp) return;
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between bg-gray-800 rounded-lg py-2 px-3';
+      row.innerHTML = `
+        <span class="truncate"><span class="font-semibold">${comp.symbol}</span>&nbsp;${comp.name}</span>
+        <button data-id="${comp.id}" class="ri-close-line text-gray-400 hover:text-red-500 text-lg remove-selected"></button>
+      `;
+      
+      // attach remove handler
+      row.querySelector('.remove-selected').addEventListener('click', (e) => {
+        const id = +e.currentTarget.getAttribute('data-id');
+        selected.delete(id);
+        renderSelectedComponents();
+        renderComponentList();
+      });
+list.appendChild(row);
+    });
+    // toggle empty / container
+    if (selected.size === 0) {
+      emptyState.classList.remove('hidden');
+      if(container) container.classList.add('hidden');
+    } else {
+      emptyState.classList.add('hidden');
+      if(container) container.classList.remove('hidden');
+    }
+    if (countEl) countEl.textContent = selected.size;
+    // attach remove listeners
+    list.querySelectorAll('.remove-selected').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+        selected.delete(id);
+        const cb = document.getElementById('checkbox-' + id);
+        if (cb) cb.checked = false;
+        renderSelectedComponents();
+      });
+    });
+  }
+
+
+  // Search input live filter
+  document.addEventListener("DOMContentLoaded", () => {
+    const search = document.getElementById("component-search");
+    if (search) {
+      search.addEventListener("input", renderComponentList);
+    }
+  });
+
+  // Load on first page load
+  document.addEventListener("DOMContentLoaded", fetchComponents);
+  // And whenever step 1 is shown again
+  window.addEventListener("showStep1", fetchComponents);
+
+  // kick off initial load
+    disableFilters();
+fetchComponents();
+  renderSelectedComponents();
+</script>
+<script id="chart-initialization" type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+// -- Replace with your own Supabase credentials --
+const supabaseUrl = "https://ftyfslzxtqalylwekjcv.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1OTU0NDEsImV4cCI6MjA2NTE3MTQ0MX0.7UNbOoclq4s-3M1o95-c3pmie0S5eRpXdPf1f755gbE";
+const supabase = createClient(supabaseUrl, supabaseKey);
+window.supabase = supabase;
+// -------------------------------------------------
+
+// Global arrays so the rest of the UI keeps working
+const dates = [];
+const customIndexData = [];
+const sp500Data = [];
+const nasdaqData = [];  // Placeholder, can be filled later
+
+// Expose arrays for other scripts/toggles that rely on them
+window.dates = dates;
+window.customIndexData = customIndexData;
+window.sp500Data = sp500Data;
+window.nasdaqData = nasdaqData;
+
+// Init chart
+const chartDom = document.getElementById("performance-chart");
+const myChart  = echarts.init(chartDom);
+window.myChart = myChart;
+
+// Fetch S&P 500 history (latest 252 trading days)
+async function loadSp500(days = 252) {
+  const { data, error } = await supabase
+    .from("daily_prices")
+    .select("trade_date, close")
+    .eq("symbol", "^GSPC")
+    .order("trade_date", { ascending: true })
+    .limit(days);
+
+  if (error) {
+    console.error("Supabase error:", error);
+    return;
+  }
+  if (!data || !data.length) {
+    console.warn("No data for ^GSPC");
+    return;
+  }
+
+  data.forEach(row => {
+    dates.push(row.trade_date);
+    sp500Data.push(Number(row.close));
+    customIndexData.push(0);       // zero line
+    nasdaqData.push(null);         // still empty
+  });
+
+  renderChart();
+}
+
+function renderChart() {
+  const option = {
+    tooltip: { trigger: "axis" },
+    legend: {
+      textStyle: { color: "#f8fafc" },
+      data: ["Custom Index", "S&P 500", "NASDAQ"],
+      selected: { "Custom Index": false, "S&P 500": true, "NASDAQ": true }
+    },
+    grid: { top: 60, bottom: 30, left: 50, right: 30, containLabel: true },
+    xAxis: {
+      type: "category",
+      data: dates,
+      axisLine: { lineStyle: { color: "#334155" } },
+      axisLabel: { color: "#94a3b8", formatter: v => v.slice(5) } // show MM-DD
+    },
+    yAxis: {
+      type: "value",
+      axisLine: { lineStyle: { color: "#334155" } },
+      splitLine: { lineStyle: { color: "#1e293b" } },
+      axisLabel: { color: "#94a3b8" }
+    },
+    series: [
+      {
+        name: "Custom Index",
+        type: "line",
+        data: customIndexData,
+        lineStyle: { width: 3, color: "rgba(87, 181, 231, 1)" },
+        itemStyle: { color: "rgba(87, 181, 231, 1)" },
+        symbol: "none",
+        smooth: true
+      },
+      {
+        name: "S&P 500",
+        type: "line",
+        data: sp500Data,
+        lineStyle: { width: 2, color: "rgba(141, 211, 199, 1)" },
+        itemStyle: { color: "rgba(141, 211, 199, 1)" },
+        symbol: "none",
+        smooth: true
+      },
+      {
+        name: "NASDAQ",
+        type: "line",
+        data: nasdaqData,
+        lineStyle: { width: 2, color: "rgba(251, 191, 114, 1)" },
+        itemStyle: { color: "rgba(251, 191, 114, 1)" },
+        symbol: "none",
+        smooth: true
+      }
+    ]
+  };
+  myChart.setOption(option);
+}
+
+loadSp500();  // kick things off
+window.addEventListener("resize", () => myChart.resize());
+</script>
+<!-- Series checkbox binder -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  function bindCheckbox(id, seriesName, indicatorId) {
+    const cb = document.getElementById(id);
+    if (!cb) return;
+    const indicator = indicatorId ? document.getElementById(indicatorId) : null;
+    function apply() {
+      if (!window.myChart) return;
+      if (indicator) {
+        indicator.classList.toggle('hidden', !cb.checked);
+      }
+      window.myChart.dispatchAction({
+        type: cb.checked ? 'legendSelect' : 'legendUnSelect',
+        name: seriesName
+      });
+    }
+    cb.addEventListener('change', apply);
+    // trigger once for initial state
+    apply();
+  }
+
+  bindCheckbox('show-custom-index', 'Custom Index', 'show-custom-index-indicator');
+  bindCheckbox('show-sp500', 'S&P 500', 'show-sp500-indicator');
+  bindCheckbox('show-nasdaq', 'NASDAQ', 'show-nasdaq-indicator');
+});
+</script>
+<!-- Price‑Weighted Index calculation on Run Backtest (key fix) -->
+<script type="module">
+function getSupabase() {
+  if (window.supabase) return window.supabase;
+  // fallback (shouldn't happen)
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+  return createClient("https://ftyfslzxtqalylwekjcv.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM1NTc1NDgsImV4cCI6MjAwOTEzMzU0OH0.yTEAAjKoUO84nxIfeJr7P6LZiQDXyQBQ-JJ6xhrW-m8");
+}
+
+async function buildPriceWeighted(supabase, symbols,
+                                  startDate="2023-12-26",
+                                  endDate="2024-12-24") {
+  if (!symbols.length) return { dates: [], values: [] };
+  const { data, error } = await supabase
+    .from("daily_prices")
+    .select("trade_date, symbol, close")
+    .in("symbol", symbols)
+    .gte("trade_date", startDate)
+    .lte("trade_date", endDate)
+    .order("trade_date", { ascending: true });
+  if (error) {
+    console.error(error);
+    return { dates: [], values: [] };
+  }
+  if (!data || !data.length) return { dates: [], values: [] };
+  const byDate = {};
+  data.forEach(r => {
+    (byDate[r.trade_date] ??= []).push(+r.close);
+  });
+  const dates = Object.keys(byDate).sort();
+  const raw = dates.map(d => byDate[d].reduce((a,b)=>a+b,0)/byDate[d].length);
+  const base = raw[0] || 1;
+  const values = raw.map(v => v/base*100);
+  return { dates, values };
+}
+
+function extractSelected() {
+  return Array.from(document.querySelectorAll(".checkbox-selection:checked"))
+    .map(cb => cb.closest("label")?.querySelector(".font-semibold")?.textContent.trim())
+    .filter(Boolean);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("run-backtest");
+  if (!btn) return;
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const symbols = extractSelected();
+    if (!symbols.length) { alert("Select at least one component."); return; }
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = "Running…";
+    const supabase = await getSupabase();
+    const { dates, values } = await buildPriceWeighted(supabase, symbols);
+    btn.disabled = false;
+    btn.textContent = orig;
+    if (!dates.length) { alert("No price data fetched."); return; }
+    localStorage.setItem("customDates", JSON.stringify(dates));
+    localStorage.setItem("customIndexValues", JSON.stringify(values));
+// ---------- DEBUG START ----------
+console.log("⏳  Price-Weighted Index");
+console.log("Symbols:", symbols.join(", "));
+console.log("Points:", values.length);
+console.table(
+  values.slice(0, 5).map((v, i) => ({ date: dates[i], value: v }))
+);
+// badge in UI
+const seriesTitle = document.querySelector('div.text-sm.font-medium[data-en="Series"]');
+if (seriesTitle) {
+  let badge = document.getElementById("ci-badge");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.id = "ci-badge";
+    badge.className = "ml-2 text-xs text-gray-500";
+    seriesTitle.appendChild(badge);
+  }
+  badge.textContent = `⚙ CI: ${values.length} pts`;
+}
+// ---------- DEBUG END ----------
+
+    const next = document.getElementById("next-step");
+    if (next) next.click();
+  });
+});
+</script>
+</div></section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const userLang = navigator.language || navigator.userLanguage;
+    const lang = userLang.startsWith('fr') ? 'fr' : 'en';
+
+    const dropdown = document.getElementById('language-dropdown');
+    const currentLangSpan = document.getElementById('current-language');
+    const langButtons = dropdown ? dropdown.querySelectorAll('button[data-lang]') : [];
+
+    if (currentLangSpan) {
+        currentLangSpan.textContent = lang === 'fr' ? 'Français' : 'English';
+    }
+
+    langButtons.forEach(btn => {
+        const isActive = btn.getAttribute('data-lang') === lang;
+        const checkIcon = btn.querySelector('.language-check');
+        if (checkIcon) checkIcon.classList.toggle('opacity-0', !isActive);
+    });
+
+    // Trigger UI language change
+    document.querySelectorAll('[data-en], [data-fr]').forEach(el => {
+        const fr = el.getAttribute('data-fr');
+        const en = el.getAttribute('data-en');
+        if (lang === 'fr' && fr) {
+            el.textContent = fr;
+        } else if (lang === 'en' && en) {
+            el.textContent = en;
+        }
+    });
+
+    document.querySelectorAll('[data-fr-placeholder], [data-en-placeholder]').forEach(el => {
+        const fr = el.getAttribute('data-fr-placeholder');
+        const en = el.getAttribute('data-en-placeholder');
+        if (lang === 'fr' && fr) {
+            el.setAttribute('placeholder', fr);
+        } else if (lang === 'en' && en) {
+            el.setAttribute('placeholder', en);
+        }
+    });
+});
+</script>
+</body>
+</html>
