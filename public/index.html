@@ -851,7 +851,7 @@ No components selected. Add components from the available list.
 <div class="w-6 h-6 rounded-full bg-green-600 border-4 border-[#0B1120]"></div>
 </div>
 <div class="grid md:grid-cols-2 gap-8 items-center">
-<div class="md:text-right md:pr-16">
+<div class="md:pl-16 max-w-xl">
 <div class="inline-flex items-center gap-2 text-green-400 mb-3">
 <i class="ri-check-double-line text-xl"></i>
 <span class="font-medium">Q2 2025</span>
@@ -873,7 +873,7 @@ No components selected. Add components from the available list.
 <div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
 </div>
 <div class="grid md:grid-cols-2 gap-8 items-center">
-<div class="md:text-right md:pr-16">
+<div class="md:pl-16 max-w-xl">
 <div class="inline-flex items-center gap-2 text-blue-400 mb-3">
 <i class="ri-scales-3-line text-xl"></i>
 <span class="font-medium">Q4 2025</span>
@@ -903,7 +903,7 @@ No components selected. Add components from the available list.
 <div class="absolute left-1/2 -translate-x-1/2 -top-3">
 <div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
 </div>
-<div class="grid md:grid-cols-2 gap-8 items-center"><div class="md:text-right md:pr-16">
+<div class="grid md:grid-cols-2 gap-8 items-center"><div class="md:pl-16 max-w-xl">
 <div class="inline-flex items-center gap-2 text-blue-400 mb-3">
 <i class="ri-database-2-line text-xl"></i>
 <span class="font-medium">Q1 2026</span>
@@ -911,7 +911,6 @@ No components selected. Add components from the available list.
 <h3 class="text-2xl font-semibold text-white mb-3" data-en="Live Data Feeds Integration" data-fr="Intégration de flux de données en temps réel">Live Data Feeds Integration</h3>
 <p class="text-blue-100/80" data-en="Connecting to real-time market data sources to ensure accurate and timely index valuation." data-fr="Connexion aux sources de données de marché en temps réel pour une valorisation précise et à jour.">Connecting to real-time market data sources to ensure accurate and timely index valuation.</p>
 </div><div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30 md:ml-16">
-<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30">
 <div class="space-y-3">
 <div class="flex items-center gap-3 text-blue-100/80">
 <i class="ri-checkbox-circle-line text-blue-400"></i>
@@ -926,7 +925,6 @@ No components selected. Add components from the available list.
 <span data-en="Corporate action processing" data-fr="Traitement des événements d’entreprise">Corporate action processing</span>
 </div>
 </div>
-</div>
 </div></div>
 </div>
 <div class="relative">
@@ -934,7 +932,7 @@ No components selected. Add components from the available list.
 <div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
 </div>
 <div class="grid md:grid-cols-2 gap-8 items-center">
-<div class="md:text-right md:pr-16">
+<div class="md:pl-16 max-w-xl">
 <div class="inline-flex items-center gap-2 text-blue-400 mb-3">
 <i class="ri-rocket-line text-xl"></i>
 <span class="font-medium">Q2 2026</span>
@@ -965,7 +963,7 @@ No components selected. Add components from the available list.
 <div class="w-6 h-6 rounded-full bg-blue-900/30 border-4 border-[#0B1120]"></div>
 </div>
 <div class="grid md:grid-cols-2 gap-8 items-center">
-<div class="md:text-right md:pr-16">
+<div class="md:pl-16 max-w-xl">
 <div class="inline-flex items-center gap-2 text-blue-400 mb-3">
 <i class="ri-brain-line text-xl"></i>
 <span class="font-medium">Q3 2026</span>
@@ -1374,10 +1372,18 @@ updateCheckmarks();
 languageDropdown.classList.add('hidden');
 }
 }
-function updateCheckmarks() {
-document.querySelectorAll('.language-check').forEach(check => {
-check.style.opacity = '0';
-});
+
+function updateCheckmarks() {document.querySelectorAll('.language-check').forEach(icon => {
+    icon.classList.remove("opacity-100", "opacity-0");
+  });
+  document.querySelectorAll('[data-lang]').forEach(button => {
+    const icon = button.querySelector('.language-check');
+    if (icon) {
+      const isActive = button.dataset.lang === window.currentLanguage;icon.classList.add(isActive ? "opacity-100" : "opacity-0");
+    }
+  });
+}
+);
 const activeLanguage = document.querySelector(`[data-lang="${currentLanguage}"] .language-check`);
 if (activeLanguage) {
 activeLanguage.style.opacity = '1';
@@ -1876,6 +1882,70 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('mobile-language-selector').addEventListener('click', function () {
     document.getElementById('mobile-language-dropdown').classList.toggle('hidden');
   });
+</script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  function setLanguage(lang) {document.querySelectorAll('[data-en]').forEach(el => {
+      if (el.dataset[lang]) {el.textContent = el.dataset[lang];
+      }
+    });
+    document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+      const placeholder = el.dataset[lang + 'Placeholder'];
+      if (placeholder) {el.placeholder = placeholder;
+      }
+    });
+    const current = document.getElementById('current-language');
+    if (current) {
+      current.textContent = lang === 'en' ? 'English' : 'Français';}
+    document.querySelectorAll('.language-check').forEach(i => i.classList.add('opacity-0'));
+    document.querySelectorAll('[data-lang="' + lang + '"] .language-check').forEach(i => i.classList.remove('opacity-0'));
+  }
+
+  // Desktop dropdown toggle logic (robust)
+  const desktopSelector = document.getElementById('language-selector');
+  const desktopDropdown = document.getElementById('language-dropdown');
+  if (desktopSelector && desktopDropdown) {
+    desktopSelector.addEventListener('click', () => {
+      const isVisible = desktopDropdown.style.display === 'block';
+      if (!isVisible) {
+        desktopDropdown.classList.remove('hidden');
+        desktopDropdown.style.display = 'block';} else {
+        desktopDropdown.classList.add('hidden');
+        desktopDropdown.style.display = 'none';}
+    });
+  }
+
+  document.querySelectorAll('#language-dropdown button').forEach(button => {
+    button.addEventListener('click', () => {
+      const lang = button.dataset.lang;setLanguage(lang);
+      desktopDropdown.classList.add('hidden');
+      desktopDropdown.style.display = 'none';
+    });
+  });
+
+  // Mobile dropdown logic (already fixed)
+  document.querySelectorAll('#mobile-language-dropdown button').forEach(button => {
+    button.addEventListener('click', () => {
+      const lang = button.dataset.lang;setLanguage(lang);
+      const dropdown = document.getElementById('mobile-language-dropdown');
+      dropdown.classList.add('hidden');
+      dropdown.style.display = 'none';
+    });
+  });
+
+  const mobileSelector = document.getElementById('mobile-language-selector');
+  if (mobileSelector) {
+    mobileSelector.addEventListener('click', () => {
+      const dropdown = document.getElementById('mobile-language-dropdown');
+      const isVisible = dropdown.style.display === 'block';
+      if (!isVisible) {
+        dropdown.classList.remove('hidden');
+        dropdown.style.display = 'block';} else {
+        dropdown.classList.add('hidden');
+        dropdown.style.display = 'none';}
+    });
+  }setLanguage('en');
+});
 </script>
 </body>
 </html>
