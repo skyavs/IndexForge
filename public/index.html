@@ -226,10 +226,10 @@ border-radius: 10px;
 </div>
 <div class="md:hidden hidden" id="mobile-menu">
 <div class="py-4 space-y-4">
-<a class="block text-gray-100 hover:text-white scroll-smooth" data-en="Home" data-fr="Accueil" href="#">Home</a>
-<a class="block text-gray-100 hover:text-white scroll-smooth" data-en="About" data-fr="À propos" href="#team">About</a>
-<a class="block text-gray-100 hover:text-white scroll-smooth" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
-<a class="block text-primary font-medium hover:text-primary/80 scroll-smooth" data-en="Demo" data-fr="Démo" href="#demo">Demo</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
+<a class="block text-primary font-medium hover:text-primary/80 scroll-smooth text-right pr-4" data-en="Demo" data-fr="Démo" href="#demo">Demo</a>
 </div>
 </div>
 </nav>
@@ -1373,17 +1373,13 @@ languageDropdown.classList.add('hidden');
 }
 }
 
-function updateCheckmarks() {
-  console.log('[Debug] Running updateCheckmarks() with currentLanguage =', window.currentLanguage);
-  document.querySelectorAll('.language-check').forEach(icon => {
+function updateCheckmarks() {document.querySelectorAll('.language-check').forEach(icon => {
     icon.classList.remove("opacity-100", "opacity-0");
   });
   document.querySelectorAll('[data-lang]').forEach(button => {
     const icon = button.querySelector('.language-check');
     if (icon) {
-      const isActive = button.dataset.lang === window.currentLanguage;
-      console.log(`[Debug] Setting checkmark for ${button.dataset.lang}: ${isActive}`);
-      icon.classList.add(isActive ? "opacity-100" : "opacity-0");
+      const isActive = button.dataset.lang === window.currentLanguage;icon.classList.add(isActive ? "opacity-100" : "opacity-0");
     }
   });
 }
@@ -1889,9 +1885,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-  function setLanguage(lang) {
-    console.log("🔁 Switching language to:", lang);
-    document.querySelectorAll('[data-en]').forEach(el => {
+  function setLanguage(lang) {document.querySelectorAll('[data-en]').forEach(el => {
       if (el.dataset[lang]) {el.textContent = el.dataset[lang];
       }
     });
@@ -1902,9 +1896,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     const current = document.getElementById('current-language');
     if (current) {
-      current.textContent = lang === 'en' ? 'English' : 'Français';
-      console.log(" - Current language indicator updated");
-    }
+      current.textContent = lang === 'en' ? 'English' : 'Français';}
     document.querySelectorAll('.language-check').forEach(i => i.classList.add('opacity-0'));
     document.querySelectorAll('[data-lang="' + lang + '"] .language-check').forEach(i => i.classList.remove('opacity-0'));
   }
@@ -1917,21 +1909,15 @@ window.addEventListener('DOMContentLoaded', () => {
       const isVisible = desktopDropdown.style.display === 'block';
       if (!isVisible) {
         desktopDropdown.classList.remove('hidden');
-        desktopDropdown.style.display = 'block';
-        console.log("🌐 Show desktop dropdown");
-      } else {
+        desktopDropdown.style.display = 'block';} else {
         desktopDropdown.classList.add('hidden');
-        desktopDropdown.style.display = 'none';
-        console.log("🌐 Hide desktop dropdown");
-      }
+        desktopDropdown.style.display = 'none';}
     });
   }
 
   document.querySelectorAll('#language-dropdown button').forEach(button => {
     button.addEventListener('click', () => {
-      const lang = button.dataset.lang;
-      console.log("🌐 Desktop language selected:", lang);
-      setLanguage(lang);
+      const lang = button.dataset.lang;setLanguage(lang);
       desktopDropdown.classList.add('hidden');
       desktopDropdown.style.display = 'none';
     });
@@ -1940,9 +1926,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Mobile dropdown logic (already fixed)
   document.querySelectorAll('#mobile-language-dropdown button').forEach(button => {
     button.addEventListener('click', () => {
-      const lang = button.dataset.lang;
-      console.log("📱 Mobile language selected:", lang);
-      setLanguage(lang);
+      const lang = button.dataset.lang;setLanguage(lang);
       const dropdown = document.getElementById('mobile-language-dropdown');
       dropdown.classList.add('hidden');
       dropdown.style.display = 'none';
@@ -1956,18 +1940,11 @@ window.addEventListener('DOMContentLoaded', () => {
       const isVisible = dropdown.style.display === 'block';
       if (!isVisible) {
         dropdown.classList.remove('hidden');
-        dropdown.style.display = 'block';
-        console.log("📱 Show mobile dropdown");
-      } else {
+        dropdown.style.display = 'block';} else {
         dropdown.classList.add('hidden');
-        dropdown.style.display = 'none';
-        console.log("📱 Hide mobile dropdown");
-      }
+        dropdown.style.display = 'none';}
     });
-  }
-
-  console.log("✅ Initial language set to English");
-  setLanguage('en');
+  }setLanguage('en');
 });
 </script>
 </body>
