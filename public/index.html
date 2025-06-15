@@ -179,8 +179,8 @@ border-radius: 10px;
 <nav class="container mx-auto px-6 py-2">
 <div class="flex justify-between items-center">
 <div class="flex items-center gap-4">
-<img alt="IndexForge Logo" class="w-auto max-h-8 h-auto" src="/logo_192x192.png"/>
-<span class="text-xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span>
+<a class="flex items-center gap-4 hover:opacity-90 transition-opacity scroll-smooth" href="#"><img alt="IndexForge Logo" class="w-auto max-h-8 h-auto" src="/logo_192x192.png"/><span class="text-xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span></a>
+
 </div>
 <div class="hidden md:flex items-center space-x-4">
 <a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Home" data-fr="Accueil" href="#">Home</a>
@@ -303,11 +303,11 @@ Launch your custom financial index in just three simple steps
 <div class="hidden" id="equal-weighted-params">
 <div class="mb-6">
 <label class="block text-sm font-medium text-gray-400 mb-2" data-en="Initial Date" data-fr="Date Initiale">Initial Date</label>
-<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="initial-date" type="date"/>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="initial-date" type="date"/>
 </div>
 <div class="mb-6">
 <label class="block text-sm font-medium text-gray-400 mb-2" data-en="Initial Index Value" data-fr="Valeur Initiale de l'Indice">Initial Index Value</label>
-<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="initial-value" type="number" value="100"/>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="initial-value" type="number" value="100"/>
 </div>
 </div>
 <div class="hidden" id="user-defined-params">
@@ -338,11 +338,11 @@ Launch your custom financial index in just three simple steps
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 <div>
 <label class="block text-sm font-medium text-gray-400 mb-2" data-en="Start Date" data-fr="Date de Début">Start Date</label>
-<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="start-date" type="date"/>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="start-date" type="date"/>
 </div>
 <div>
 <label class="block text-sm font-medium text-gray-400 mb-2" data-en="End Date" data-fr="Date de Fin">End Date</label>
-<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="end-date" type="date"/>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="end-date" type="date"/>
 </div>
 </div>
 <div class="flex space-x-2">
