@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+
+<html><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IndexForge - Build Financial Indices Without Code</title>
+<link href="/logo_192x192.png" rel="icon" type="image/png"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#1e40af'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;family=Pacifico&amp;display=swap" rel="stylesheet"/>
+<style>
+input#show-custom-index:checked + label span > #show-custom-index-indicator {
+  background-color: rgba(87, 181, 231, 1); /* Your Index: синий */
+  display: block;
+}
+input#show-sp500:checked + label span > #show-sp500-indicator {
+  background-color: rgba(141, 211, 199, 1); /* S&P 500: зелёный */
+  display: block;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet"/>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+background-color: #0f172a;
+color: #f8fafc;
+}
+h1, h2, h3, h4, .font-heading {
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+letter-spacing: -0.02em;
+}
+.text-gradient {
+background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #1D4ED8 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type="number"] {
+-moz-appearance: textfield;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 40px;
+height: 22px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #334155;
+transition: .4s;
+border-radius: 22px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 16px;
+width: 16px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #3b82f6;
+}
+input:checked + .slider:before {
+transform: translateX(18px);
+}
+.toggle-btn {
+background-color: #1e293b;
+color: #94a3b8;
+transition: all 0.3s;
+}
+.toggle-btn.active {
+background-color: #3b82f6;
+color: white;
+}
+.progress-bar {
+position: relative;
+display: flex;
+justify-content: space-between;
+counter-reset: step;
+margin-bottom: 30px;
+}
+.progress-bar::before {
+content: "";
+position: absolute;
+top: 15px;
+left: 0;
+height: 2px;
+width: 100%;
+background-color: #334155;
+z-index: 0;
+}
+.progress-step {
+position: relative;
+z-index: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.step-circle {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+background-color: #1e293b;
+color: #94a3b8;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+margin-bottom: 8px;
+}
+.progress-step.active .step-circle {
+background-color: #3b82f6;
+color: white;
+box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+.progress-step.completed .step-circle {
+background-color: #10b981;
+color: white;
+}
+.progress-step-text {
+font-size: 0.875rem;
+color: #94a3b8;
+}
+.progress-step.active .progress-step-text {
+color: white;
+}
+.glow-effect {
+box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+.custom-scrollbar::-webkit-scrollbar {
+width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #1e293b;
+border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #3b82f6;
+border-radius: 10px;
+}
+</style>
+<!-- Color Refresh: clearer, higher‑contrast palette -->
+<style id="color-refresh">
+  /* Brand & background */
+  body               { background-color:#0e1627; color:#f1f5f9; }
+  .bg-gray-900       { background-color:#0e1627 !important; }
+  .bg-gray-800       { background-color:#1e293b !important; }
+  .bg-gray-800\/90  { background-color:rgba(30,41,59,0.95) !important; }
+  .bg-gray-800\/50  { background-color:rgba(30,41,59,0.85) !important; }
+  .bg-gray-700       { background-color:#334155 !important; }
+  .text-gray-100     { color:#f8fafc !important; }
+  .text-gray-400     { color:#cbd5e1 !important; }
+  .border-gray-800   { border-color:#1e293b !important; }
+  .border-gray-700   { border-color:#334155 !important; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
+input#show-custom-index:checked + span::before {
+  background-color: rgba(87, 181, 231, 1); /* синий */
+}
+input#show-sp500:checked + span::before {
+  background-color: rgba(141, 211, 199, 1); /* зелёный */
+}
+</style></head><body><script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+document.addEventListener("DOMContentLoaded", function () {
+    const supabaseUrl = "https://ftyfslzxtqalylwekjcv.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1OTU0NDEsImV4cCI6MjA2NTE3MTQ0MX0.7UNbOoclq4s-3M1o95-c3pmie0S5eRpXdPf1f755gbE";
+    window.supabase = createClient(supabaseUrl, supabaseKey);
+
+    if (typeof fetchComponents === 'function') {
+        fetchComponents();
+    }
+});
+</script><header class="bg-[url('https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/0e290a13f2dafb56bfb369f7e3d4d239.png')] bg-cover bg-center fixed w-full z-50 border-b border-blue-900/30">
+<nav class="container mx-auto px-6 py-2">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-4 hover:opacity-90 transition-opacity scroll-smooth" href="#"><img alt="IndexForge Logo" class="w-auto max-h-8 h-auto" src="/logo_192x192.png"/><span class="text-xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span></a>
+</div>
+<div class="hidden md:flex items-center space-x-4">
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
+<a class="bg-primary text-white hover:bg-primary/90 px-4 py-2 rounded font-medium transition-all scroll-smooth" data-en="Demo" data-fr="Démo" href="#demo">Demo</a>
+<div class="relative">
+<button class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-gray-800/50 hover:bg-gray-700/50 text-gray-100 rounded" id="language-selector">
+<i class="ri-global-line"></i>
+<span id="current-language">English</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 md:hidden">
+<div class="relative">
+<button class="flex items-center gap-1 px-2 py-1 text-sm font-medium bg-gray-800/50 hover:bg-gray-700/50 text-gray-100 rounded" id="mobile-language-selector" style="">
+<i class="ri-global-line"></i>
+</button>
+</div>
+<button class="text-gray-600" id="mobile-menu-button">
+<i class="ri-menu-line text-2xl"></i>
+</button>
+</div>
+</div>
+<div class="md:hidden hidden" id="mobile-menu">
+<div class="py-4 space-y-4">
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
+<a class="block text-primary font-medium hover:text-primary/80 scroll-smooth text-right pr-4" data-en="Demo" data-fr="Démo" href="#demo">Demo</a>
+</div>
+</div>
+</nav>
+</header><section class="py-20 bg-[#0B1120]" id="demo">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold text-white mb-4 font-heading" data-en="Try Our Index Builder" data-fr="Feuille de route du produit">Try Our Index Builder</h2>
+<p class="text-xl text-gray-600" data-en="The MVP is live — explore real data and instant results. No code, no wait — your custom index in seconds." data-fr="La version MVP est en ligne — explorez des données réelles et des résultats instantanés. Aucun code, aucun délai — votre indice personnalisé en quelques secondes.">The MVP is live — explore real data and instant results. No code, no wait — your custom index in seconds.</p>
+</div>
+<main class="container mx-auto px-6 py-8">
+<div class="progress-bar mb-10 px-10">
+<div class="progress-step active" data-step="1">
+<div class="step-circle">1</div>
+<div class="progress-step-text" data-en="Define &amp; Backtest" data-fr="Définir &amp; Backtester">Define &amp; Backtest</div>
+</div>
+<div class="progress-step" data-step="2">
+<div class="step-circle">2</div>
+<div class="progress-step-text" data-en="Analyze Results" data-fr="Analyser les Résultats">Analyze Results</div>
+</div>
+<div class="progress-step" data-step="3">
+<div class="step-circle">3</div>
+<div class="progress-step-text" data-en="Prepare Launch" data-fr="Préparer le Lancement">Prepare Launch</div>
+</div>
+</div>
+<div class="step-content" id="step-1">
+<!-- Components selection panel -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Model Configuration Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800 flex flex-col h-full">
+<h2 class="text-xl font-semibold mb-6" data-en="Model Configuration" data-fr="Configuration du Modèle">Model Configuration</h2>
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Index Model Type" data-fr="Type de Modèle d'Indice">Index Model Type</label>
+<div class="relative">
+<select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="model-type">
+<option data-en="Price Weighted" data-fr="Pondéré par Prix" value="price-weighted">Price Weighted</option>
+<option data-en="Equal Weighted" data-fr="Pondération Égale" value="equal-weighted">Equal Weighted</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="hidden" id="equal-weighted-params">
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Initial Index Value" data-fr="Valeur Initiale de l'Indice">Initial Index Value</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="initial-value" type="number" value="100"/>
+</div><div class="mb-6" id="rebalance-wrapper"><label class="block text-sm font-medium text-gray-400 mb-2" data-en="Rebalance Frequency" data-fr="Fréquence de Rééquilibrage" for="rebalance-frequency">Rebalance Frequency</label><div class="relative"><select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="rebalance-frequency" name="rebalance-frequency"><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option></select><div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"><i class="ri-arrow-down-s-line text-gray-400"></i></div></div></div>
+</div>
+<div class="hidden" id="user-defined-params">
+<div class="mb-6">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Divisor Type" data-fr="Type de Diviseur">Divisor Type</label>
+<div class="relative">
+<select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="divisor-type">
+<option data-en="Fixed Value" data-fr="Valeur Fixe" value="fixed">Fixed Value</option>
+<option data-en="Normalized to Date" data-fr="Normalisé à la Date" value="normalized">Normalized to Date</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="mb-6" id="fixed-divisor">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Divisor Value" data-fr="Valeur du Diviseur">Divisor Value</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="divisor-value" type="number" value="1"/>
+</div>
+<div class="mb-6 hidden" id="normalized-divisor">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Normalization Date" data-fr="Date de Normalisation">Normalization Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="normalization-date" type="date"/>
+</div>
+</div>
+<div class="mt-auto">
+<div class="border-t border-gray-800 pt-6 mb-6">
+<h3 class="text-lg font-medium mb-4" data-en="Backtesting Period" data-fr="Période de Backtesting">Backtesting Period</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Start Date" data-fr="Date de Début">Start Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="start-date" type="date"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="End Date" data-fr="Date de Fin">End Date</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="end-date" type="date"/>
+</div>
+</div>
+<div class="flex space-x-2">
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="1Y">1Y</button>
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="3Y">3Y</button>
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="5Y">5Y</button>
+<button class="period-btn px-3 py-1 bg-gray-800 text-gray-400 rounded-full text-sm font-medium hover:bg-gray-700" data-period="MAX">MAX</button>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200 flex items-center justify-center" id="run-backtest">
+<i class="ri-play-circle-line mr-2"></i>
+<span data-en="Run Backtest" data-fr="Lancer le Backtest">Run Backtest</span>
+</button>
+</div>
+</div>
+<!-- Available Components Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800">
+<h2 class="text-xl font-semibold mb-6" data-en="Available Components" data-fr="Composants Disponibles">Available Components</h2>
+<div class="mb-4">
+<div class="relative">
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-primary" data-en-placeholder="Search by symbol or name..." data-fr-placeholder="Rechercher par symbole ou nom..." id="component-search" placeholder="Search by symbol or name..." type="text"/>
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<i class="ri-search-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div class="mb-4 flex flex-wrap gap-2">
+<div class="relative">
+<select class="bg-gray-800 border border-gray-700 rounded text-white py-1 px-3 pr-8 appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-primary" id="sector-filter">
+<option data-en="All Sectors" data-fr="Tous les Secteurs" value="">All Sectors</option>
+<option data-en="Technology" data-fr="Technologie" value="technology">Technology</option>
+<option data-en="Finance" data-fr="Finance" value="finance">Finance</option>
+<option data-en="Healthcare" data-fr="Santé" value="healthcare">Healthcare</option>
+<option data-en="Consumer" data-fr="Consommation" value="consumer">Consumer</option>
+<option data-en="Energy" data-fr="Énergie" value="energy">Energy</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400 text-sm"></i>
+</div>
+</div>
+<div class="relative">
+<select class="bg-gray-800 border border-gray-700 rounded text-white py-1 px-3 pr-8 appearance-none text-sm focus:outline-none focus:ring-2 focus:ring-primary" id="region-filter">
+<option data-en="All Regions" data-fr="Toutes les Régions" value="">All Regions</option>
+<option data-en="North America" data-fr="Amérique du Nord" value="north-america">North America</option>
+<option data-en="Europe" data-fr="Europe" value="europe">Europe</option>
+<option data-en="Asia Pacific" data-fr="Asie-Pacifique" value="asia-pacific">Asia Pacific</option>
+<option data-en="Emerging Markets" data-fr="Marchés Émergents" value="emerging">Emerging Markets</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400 text-sm"></i>
+</div>
+</div>
+</div>
+<div class="mb-4 flex justify-between">
+<button class="text-sm text-primary hover:text-blue-400 font-medium" data-en="Select All" data-fr="Sélectionner Tout" id="select-all">Select All</button>
+<button class="text-sm text-gray-400 hover:text-gray-300 font-medium" data-en="Clear All" data-fr="Effacer Tout" id="clear-all">Clear All</button>
+</div>
+<div class="h-[400px] overflow-y-auto custom-scrollbar">
+<div class="space-y-2" id="available-components">
+<!-- Component items will be generated by JavaScript -->
+</div>
+</div>
+</div>
+<!-- Selected Components Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-semibold" data-en="Selected Components" data-fr="Composants Sélectionnés">Selected Components</h2>
+<div class="flex items-center gap-3">
+<div class="bg-gray-800 px-3 py-1 rounded-full">
+<span class="text-sm text-gray-400" data-en="Selected:" data-fr="Sélectionnés:">Selected:</span>
+<span class="text-white font-medium" id="selected-count">0</span>
+</div>
+</div>
+</div>
+<div class="hidden mb-6" id="weight-type-toggle">
+<div class="text-sm font-medium text-gray-400 mb-2" data-en="Input Type" data-fr="Type de Saisie">Input Type</div>
+<div class="flex bg-gray-800 rounded-full p-1">
+<button class="weight-toggle weights-toggle active flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap" data-en="Weights (%)" data-fr="Poids (%)">Weights (%)</button>
+<button class="weight-toggle amounts-toggle flex-1 py-1 px-3 rounded-full text-sm font-medium whitespace-nowrap" data-en="Amounts" data-fr="Montants">Amounts</button>
+</div>
+</div>
+<div class="flex gap-3 mb-6">
+<button class="flex-1 bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200 flex items-center justify-center gap-2" id="import-csv">
+<i class="ri-upload-2-line"></i>
+<span data-en="Import CSV" data-fr="Importer CSV">Import CSV</span>
+</button>
+<button class="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-button transition-colors duration-200 flex items-center justify-center gap-2" id="download-template">
+<i class="ri-download-2-line"></i>
+<span data-en="Template" data-fr="Modèle">Template</span>
+</button>
+</div>
+<input accept=".csv" class="hidden" id="csv-file-input" type="file"/>
+<div class="text-center py-10 text-gray-400" data-en="No components selected. Add components from the available list." data-fr="Aucun composant sélectionné. Ajoutez des composants depuis la liste disponible." id="selected-components-empty">
+No components selected. Add components from the available list.
+</div>
+<div class="hidden" id="selected-components-container">
+<div class="mb-4 flex justify-between items-center">
+<div class="text-sm font-medium text-gray-400">
+<span data-en="Total Weight:" data-fr="Poids Total:">Total Weight:</span> <span class="text-white" id="total-weight">0%</span>
+</div>
+<div class="flex items-center">
+<div class="w-3 h-3 rounded-full bg-red-500 mr-2" id="weight-status"></div>
+<span class="text-sm text-red-500" data-en="Total must be 100%" data-fr="Le total doit être 100%" id="weight-message">Total must be 100%</span>
+</div>
+</div>
+<div class="h-[400px] overflow-y-auto custom-scrollbar">
+<div class="space-y-3" id="selected-components">
+<!-- Selected component items will be generated by JavaScript -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="step-content hidden" id="step-2">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Chart Controls Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800">
+<h2 class="text-xl font-semibold mb-6" data-en="Chart Controls" data-fr="Contrôles du Graphique">Chart Controls</h2>
+<div class="mb-6">
+<div class="flex flex-col sm:flex-row sm:justify-between gap-4">
+<!-- Value Mode -->
+<div class="flex flex-col gap-2 w-full sm:w-1/2" id="value-mode-toggle">
+<div class="text-sm font-medium text-gray-400 mb-1">Value Mode</div>
+<button class="bg-blue-500 text-white px-4 py-2 rounded-md" data-mode="absolute">Absolute</button>
+<button class="bg-slate-700 text-white px-4 py-2 rounded-md hover:bg-slate-600" data-mode="normalize">Normalize to 100</button>
+<button class="bg-slate-700 text-white px-4 py-2 rounded-md hover:bg-slate-600" data-mode="return">Return %</button>
+</div>
+<!-- Scale Mode -->
+<div class="flex flex-col gap-2 w-full sm:w-1/2" id="scale-mode-toggle">
+<div class="text-sm font-medium text-gray-400 mb-1">Scale Mode</div>
+<button class="bg-blue-500 text-white px-4 py-2 rounded-md" data-scale="arithmetic">Arithmetic</button>
+<button class="bg-slate-700 text-white px-4 py-2 rounded-md hover:bg-slate-600" data-scale="logarithmic">Logarithmic</button>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<div class="text-sm font-medium text-gray-400 mb-2" data-en="Series" data-fr="Séries">Series</div>
+<div class="space-y-2">
+<div class="flex items-center">
+<input checked="checked" class="hidden" id="show-custom-index" type="checkbox"/>
+<label class="flex items-center cursor-pointer" for="show-custom-index">
+<span class="w-4 h-4 inline-block mr-2 rounded border border-gray-400 flex-shrink-0 relative">
+<span class="absolute inset-0 hidden bg-primary rounded-sm" id="show-custom-index-indicator"></span>
+</span>
+<span class="text-sm" data-en="Custom Index" data-fr="Indice Personnalisé">Custom Index</span>
+</label>
+</div>
+<div class="flex items-center">
+<input checked="checked" class="hidden" id="show-sp500" type="checkbox"/>
+<label class="flex items-center cursor-pointer" for="show-sp500">
+<span class="w-4 h-4 inline-block mr-2 rounded border border-gray-400 flex-shrink-0 relative">
+<span class="absolute inset-0 hidden bg-blue-400 rounded-sm" id="show-sp500-indicator"></span>
+</span>
+<span class="text-sm">S&amp;P 500</span>
+</label>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-6">
+<h3 class="text-lg font-medium mb-4" data-en="Key Metrics" data-fr="Métriques Clés">Key Metrics</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Returns (1Y)" data-fr="Rendements (1A)">Returns (1Y)</div>
+<div class="text-lg font-semibold text-green-400">+24.8%</div>
+</div>
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Volatility" data-fr="Volatilité">Volatility</div>
+<div class="text-lg font-semibold">18.2%</div>
+</div>
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Sharpe Ratio" data-fr="Ratio de Sharpe">Sharpe Ratio</div>
+<div class="text-lg font-semibold">1.36</div>
+</div>
+<div class="bg-gray-800 p-3 rounded">
+<div class="text-xs text-gray-400 mb-1" data-en="Max Drawdown" data-fr="Drawdown Max">Max Drawdown</div>
+<div class="text-lg font-semibold text-red-400">-12.4%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Chart Panel -->
+<div class="bg-gray-900 rounded p-6 border border-gray-800 lg:col-span-2">
+<h2 class="text-xl font-semibold mb-6" data-en="Performance Analysis" data-fr="Analyse de Performance">Performance Analysis</h2>
+<div class="w-full h-[500px] flex-grow" id="performance-chart"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+<div class="bg-gray-800 p-4 rounded">
+<div class="text-sm text-gray-400 mb-1" data-en="Returns" data-fr="Rendements">Returns</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<div class="text-xs text-gray-400" data-en="1M" data-fr="1M">1M</div>
+<div class="text-sm font-medium text-green-400">+3.2%</div>
+</div>
+<div>
+<div class="text-xs text-gray-400" data-en="3M" data-fr="3M">3M</div>
+<div class="text-sm font-medium text-green-400">+8.7%</div>
+</div>
+<div>
+<div class="text-xs text-gray-400" data-en="1Y" data-fr="1A">1Y</div>
+<div class="text-sm font-medium text-green-400">+24.8%</div>
+</div>
+<div>
+<div class="text-xs text-gray-400" data-en="YTD" data-fr="YTD">YTD</div>
+<div class="text-sm font-medium text-green-400">+16.3%</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-800 p-4 rounded">
+<div class="text-sm text-gray-400 mb-1" data-en="Risk Metrics" data-fr="Métriques de Risque">Risk Metrics</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="Beta" data-fr="Bêta">Beta</div>
+<div class="text-sm font-medium">0.92</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="Alpha" data-fr="Alpha">Alpha</div>
+<div class="text-sm font-medium text-green-400">2.4%</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="R²" data-fr="R²">R²</div>
+<div class="text-sm font-medium">0.87</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-800 p-4 rounded">
+<div class="text-sm text-gray-400 mb-1" data-en="Benchmark Comparison" data-fr="Comparaison avec Benchmark">Benchmark Comparison</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="vs S&amp;P 500" data-fr="vs S&amp;P 500">vs S&amp;P 500</div>
+<div class="text-sm font-medium text-green-400">+5.2%</div>
+</div>
+<div class="flex justify-between">
+<div class="text-sm font-medium text-red-400">-1.8%</div>
+</div>
+<div class="flex justify-between">
+<div class="text-xs text-gray-400" data-en="Tracking Error" data-fr="Erreur de Suivi">Tracking Error</div>
+<div class="text-sm font-medium">3.4%</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="step-content hidden" id="step-3">
+<div class="max-w-3xl mx-auto bg-gray-900 rounded p-8 border border-gray-800">
+<h2 class="text-2xl font-semibold mb-8 text-center" data-en="Prepare Index for Launch" data-fr="Préparer l'Indice pour le Lancement">Prepare Index for Launch</h2>
+<div class="mb-8">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Index Name" data-fr="Nom de l'Indice">Index Name</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" data-en-placeholder="e.g. Tech Leaders Index" data-fr-placeholder="ex. Indice des Leaders Technologiques" id="index-name" placeholder="e.g. Tech Leaders Index" type="text"/>
+</div>
+<div class="mb-8">
+<h3 class="text-lg font-medium mb-4" data-en="Calculation Schedule" data-fr="Calendrier de Calcul">Calculation Schedule</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Calculation Time" data-fr="Heure de Calcul">Calculation Time</label>
+<input class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary" id="calc-time" type="time"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Timezone" data-fr="Fuseau Horaire">Timezone</label>
+<div class="relative">
+<select class="w-full bg-gray-800 border border-gray-700 rounded text-white py-2 px-3 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-primary" id="timezone">
+<option value="UTC">UTC</option>
+<option value="EST">EST (UTC-5)</option>
+<option value="CET">CET (UTC+1)</option>
+<option value="JST">JST (UTC+9)</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-4">
+<label class="block text-sm font-medium text-gray-400 mb-2" data-en="Calculation Days" data-fr="Jours de Calcul">Calculation Days</label>
+<div class="flex flex-wrap gap-2">
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="mon"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Mon" data-fr="Lun">Mon</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="tue"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Tue" data-fr="Mar">Tue</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="wed"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Wed" data-fr="Mer">Wed</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="thu"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Thu" data-fr="Jeu">Thu</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input checked="" class="hidden" type="checkbox" value="fri"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Fri" data-fr="Ven">Fri</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input class="hidden" type="checkbox" value="sat"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Sat" data-fr="Sam">Sat</span>
+</label>
+<label class="day-checkbox flex items-center bg-gray-800 px-3 py-1 rounded cursor-pointer">
+<input class="hidden" type="checkbox" value="sun"/>
+<span class="day-indicator w-3 h-3 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Sun" data-fr="Dim">Sun</span>
+</label>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-lg font-medium mb-4" data-en="Calculation Frequency" data-fr="Fréquence de Calcul">Calculation Frequency</h3>
+<div class="flex flex-wrap gap-3 mb-4">
+<label class="frequency-radio flex items-center bg-gray-800 px-4 py-2 rounded cursor-pointer">
+<input checked="" class="hidden" name="frequency" type="radio" value="eod"/>
+<span class="radio-indicator w-4 h-4 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="End of Day" data-fr="Fin de Journée">End of Day</span>
+</label>
+<label class="frequency-radio flex items-center bg-gray-800 px-4 py-2 rounded cursor-pointer">
+<input class="hidden" name="frequency" type="radio" value="hourly"/>
+<span class="radio-indicator w-4 h-4 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Hourly" data-fr="Horaire">Hourly</span>
+</label>
+<label class="frequency-radio flex items-center bg-gray-800 px-4 py-2 rounded cursor-pointer">
+<input class="hidden" name="frequency" type="radio" value="realtime"/>
+<span class="radio-indicator w-4 h-4 inline-block mr-2 rounded-full border border-gray-400"></span>
+<span class="text-sm" data-en="Real-time" data-fr="Temps Réel">Real-time</span>
+</label>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-lg font-medium mb-4" data-en="Distribution Settings" data-fr="Paramètres de Distribution">Distribution Settings</h3>
+<div class="space-y-3">
+<label class="flex items-center justify-between">
+<span class="text-sm" data-en="Email Notifications" data-fr="Notifications par Email">Email Notifications</span>
+<label class="custom-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</label>
+<label class="flex items-center justify-between">
+<span class="text-sm" data-en="API Access" data-fr="Accès API">API Access</span>
+<label class="custom-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</label>
+<label class="flex items-center justify-between">
+<span class="text-sm" data-en="Public Dashboard" data-fr="Tableau de Bord Public">Public Dashboard</span>
+<label class="custom-switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</label>
+</div>
+</div>
+<div class="mb-8 bg-gray-800 p-4 rounded">
+<h3 class="text-lg font-medium mb-3" data-en="Final Review" data-fr="Révision Finale">Final Review</h3>
+<div class="space-y-2">
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-400 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<span class="text-sm" data-en="Index model and components validated" data-fr="Modèle d'indice et composants validés">Index model and components validated</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-400 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<span class="text-sm" data-en="Backtesting results reviewed" data-fr="Résultats de backtesting examinés">Backtesting results reviewed</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-green-400 mr-2">
+<i class="ri-check-line"></i>
+</div>
+<span class="text-sm" data-en="Calculation schedule configured" data-fr="Calendrier de calcul configuré">Calculation schedule configured</span>
+</div>
+<div class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center text-yellow-400 mr-2">
+<i class="ri-error-warning-line"></i>
+</div>
+<span class="text-sm" data-en="Data subscription required for real-time calculation" data-fr="Abonnement aux données requis pour le calcul en temps réel">Data subscription required for real-time calculation</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-gray-700 cursor-not-allowed text-gray-400 font-medium py-3 px-4 rounded-button transition-colors duration-200 flex items-center justify-center" disabled="" id="launch-index">
+<i class="ri-rocket-line mr-2"></i>
+<span data-en="Launch Index (Coming Soon)" data-fr="Lancer l'Indice (Bientôt Disponible)">Launch Index (Coming Soon)</span>
+</button>
+</div>
+</div>
+<div class="mt-10 flex justify-between">
+<button class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-button transition-colors duration-200 flex items-center justify-center opacity-50 cursor-not-allowed" id="prev-step">
+<i class="ri-arrow-left-line mr-2"></i>
+<span data-en="Previous" data-fr="Précédent">Previous</span>
+</button>
+<button class="bg-primary hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-button transition-colors duration-200 flex items-center justify-center" id="next-step">
+<span data-en="Next" data-fr="Suivant">Next</span>
+<i class="ri-arrow-right-line ml-2"></i>
+</button>
+</div>
+</main>
+<!-- About & Team Section -->
+<!-- Roadmap Section -->
+<!-- Contact Section -->
+<!-- Footer -->
+<script id="mobile-menu">
+document.addEventListener('DOMContentLoaded', function() {
+// Model type selection handling
+const modelType = document.getElementById('model-type');
+const equalWeightedParams = document.getElementById('equal-weighted-params');
+const userDefinedParams = document.getElementById('user-defined-params');
+const weightTypeToggle = document.getElementById('weight-type-toggle');
+const divisorType = document.getElementById('divisor-type');
+const fixedDivisor = document.getElementById('fixed-divisor');
+const normalizedDivisor = document.getElementById('normalized-divisor');
+modelType.addEventListener('change', function() {
+equalWeightedParams.classList.add('hidden');
+userDefinedParams.classList.add('hidden');
+weightTypeToggle.classList.add('hidden');
+switch(this.value) {
+case 'equal-weighted':
+equalWeightedParams.classList.remove('hidden');
+break;
+case 'user-defined':
+userDefinedParams.classList.remove('hidden');
+weightTypeToggle.classList.remove('hidden');
+break;
+}
+});
+// Weight type toggle handling
+const weightToggles = document.querySelectorAll('.weight-toggle');
+weightToggles.forEach(toggle => {
+toggle.addEventListener('click', function() {
+weightToggles.forEach(t => {
+t.classList.remove('active', 'bg-primary', 'text-white');
+t.classList.add('text-gray-400');
+});
+this.classList.add('active', 'bg-primary', 'text-white');
+this.classList.remove('text-gray-400');
+const isAmounts = this.classList.contains('amounts-toggle');
+const weightInputs = document.querySelectorAll('.component-weight');
+const weightLabels = document.querySelectorAll('.weight-label');
+weightInputs.forEach((input, index) => {
+if (isAmounts) {
+input.placeholder = '0.00';
+if (weightLabels[index]) weightLabels[index].textContent = '$';
+} else {
+input.placeholder = '0';
+if (weightLabels[index]) weightLabels[index].textContent = '%';
+}
+});
+});
+});
+divisorType.addEventListener('change', function() {
+if(this.value === 'fixed') {
+fixedDivisor.classList.remove('hidden');
+normalizedDivisor.classList.add('hidden');
+} else {
+fixedDivisor.classList.add('hidden');
+normalizedDivisor.classList.remove('hidden');
+}
+});
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+// Add smooth scrolling to all links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+if (targetId === '#') {
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+} else {
+document.querySelector(targetId).scrollIntoView({
+behavior: 'smooth'
+});
+}
+});
+});
+mobileMenuButton.addEventListener('click', () => {
+mobileMenu.classList.toggle('hidden');
+});
+// Close mobile menu when clicking on a link
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+link.addEventListener('click', () => {
+mobileMenu.classList.add('hidden');
+});
+});
+});
+</script>
+<!-- Supabase Components Loader -->
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const supabaseUrl = "https://ftyfslzxtqalylwekjcv.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1OTU0NDEsImV4cCI6MjA2NTE3MTQ0MX0.7UNbOoclq4s-3M1o95-c3pmie0S5eRpXdPf1f755gbE";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  let allComponents = [];
+  const selected = new Set();
+  // Map symbol -> latest close price
+  let priceMap = {};
+
+  async function fetchLatestPrices(symbols) {
+    if (!symbols || symbols.length === 0) return;
+    try {
+      // Latest date
+      const { data: last, error: errDate } = await supabase
+        .from('daily_prices')
+        .select('trade_date')
+        .order('trade_date', { ascending: false })
+        .limit(1);
+      if (errDate) throw errDate;
+      const lastDate = last?.[0]?.trade_date;
+      if (!lastDate) return;
+
+      const { data: prices, error: errPrices } = await supabase
+        .from('daily_prices')
+        .select('symbol, close')
+        .eq('trade_date', lastDate)
+        .in('symbol', symbols);
+      if (errPrices) throw errPrices;
+
+      priceMap = {};
+      prices.forEach(p => priceMap[p.symbol] = Number(p.close));
+    } catch(e){ console.error('Price fetch error:', e); }
+  }
+
+
+  async function fetchComponents() {
+    const { data, error } = await supabase
+      .from("components")
+      .select("id, symbol, name")
+      .eq("is_active", true)
+      .order("symbol", { ascending: true });
+
+    if (error) {
+      console.error("Supabase fetch error:", error);
+      return;
+    }
+    allComponents = data;
+    await fetchLatestPrices(allComponents.map(c=>c.symbol));
+    renderComponentList();
+  }
+
+  function renderComponentList() {
+    const list = document.getElementById("available-components");
+    if (!list) return;
+    list.innerHTML = "";
+
+    const query = document.getElementById("component-search").value.toLowerCase();
+    const filtered = allComponents.filter(c =>
+      c.symbol.toLowerCase().includes(query) || c.name.toLowerCase().includes(query)
+    );
+
+    filtered.forEach(c => {
+      const card = document.createElement("div");
+      card.className = "w-full";
+      card.innerHTML = `
+        <label class="flex items-center justify-between w-full bg-gray-800 rounded-lg py-2 px-3 hover:bg-gray-700 cursor-pointer">
+          <div class="flex items-center">
+            <input id="checkbox-${c.id}" type="checkbox" class="form-checkbox h-4 w-4 text-primary mr-3 checkbox-selection" ${selected.has(c.id) ? 'checked' : ''}>
+            <span class="truncate"><span class="font-semibold">${c.symbol}</span>&nbsp;${c.name}</span>
+          </div>
+          <div class="ml-4 text-gray-400 text-sm">${priceMap[c.symbol] !== undefined ? '$'+priceMap[c.symbol].toFixed(2) : '--'}</div>
+        </label>
+`;
+      const checkbox = card.querySelector("input");
+      checkbox.addEventListener("change", e => {
+        if (e.target.checked) {
+          selected.add(c.id);
+        renderSelectedComponents();
+      } else {
+          selected.delete(c.id);
+        renderSelectedComponents();
+      }
+      });
+      list.appendChild(card);
+    });
+  }
+  function renderSelectedComponents() {
+    const list = document.getElementById('selected-components');
+    const emptyState = document.getElementById('selected-components-empty');
+    const container = document.getElementById('selected-components-container');
+    const countEl = document.getElementById('selected-count');
+    if (!list) return;
+    list.innerHTML = '';
+    selected.forEach(id => {
+      const comp = allComponents.find(c => c.id === id);
+      if (!comp) return;
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between bg-gray-800 rounded-lg py-2 px-3';
+      row.innerHTML = `
+        <span class="truncate"><span class="font-semibold">${comp.symbol}</span>&nbsp;${comp.name}</span>
+        <button data-id="${comp.id}" class="ri-close-line text-gray-400 hover:text-red-500 text-lg remove-selected"></button>
+      `;
+      
+      // attach remove handler
+      row.querySelector('.remove-selected').addEventListener('click', (e) => {
+        const id = +e.currentTarget.getAttribute('data-id');
+        selected.delete(id);
+        renderSelectedComponents();
+        renderComponentList();
+      });
+list.appendChild(row);
+    });
+    // toggle empty / container
+    if (selected.size === 0) {
+      emptyState.classList.remove('hidden');
+      if(container) container.classList.add('hidden');
+    } else {
+      emptyState.classList.add('hidden');
+      if(container) container.classList.remove('hidden');
+    }
+    if (countEl) countEl.textContent = selected.size;
+    // attach remove listeners
+    list.querySelectorAll('.remove-selected').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = parseInt(e.currentTarget.getAttribute('data-id'));
+        selected.delete(id);
+        const cb = document.getElementById('checkbox-' + id);
+        if (cb) cb.checked = false;
+        renderSelectedComponents();
+      });
+    });
+  }
+
+
+  // Search input live filter
+  document.addEventListener("DOMContentLoaded", () => {
+    const search = document.getElementById("component-search");
+    if (search) {
+      search.addEventListener("input", renderComponentList);
+    }
+  });
+
+  // Load on first page load
+  document.addEventListener("DOMContentLoaded", fetchComponents);
+  // And whenever step 1 is shown again
+  window.addEventListener("showStep1", fetchComponents);
+
+  // kick off initial load
+    disableFilters();
+fetchComponents();
+  renderSelectedComponents();
+</script>
+<!-- Series checkbox binder -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  function bindCheckbox(id, seriesName, indicatorId) {
+    const cb = document.getElementById(id);
+    if (!cb) return;
+    const indicator = indicatorId ? document.getElementById(indicatorId) : null;
+    function apply() {
+      if (!window.myChart) return;
+      if (indicator) {
+        indicator.classList.toggle('hidden', !cb.checked);
+      }
+      window.myChart.dispatchAction({
+        type: cb.checked ? 'legendSelect' : 'legendUnSelect',
+        name: seriesName
+      });
+    }
+    cb.addEventListener('change', apply);
+    // trigger once for initial state
+    apply();
+  }
+
+  bindCheckbox('show-custom-index', 'Your Index', 'show-custom-index-indicator');
+  bindCheckbox('show-sp500', 'S&P 500', 'show-sp500-indicator');
+  bindCheckbox('show-nasdaq', 'NASDAQ', 'show-nasdaq-indicator');
+});
+</script>
+<!-- Price‑Weighted Index calculation on Run Backtest (key fix) -->
+<script type="module">
+function getSupabase() {
+  if (window.supabase) return window.supabase;
+  // fallback (shouldn't happen)
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+  return createClient("https://ftyfslzxtqalylwekjcv.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM1NTc1NDgsImV4cCI6MjAwOTEzMzU0OH0.yTEAAjKoUO84nxIfeJr7P6LZiQDXyQBQ-JJ6xhrW-m8");
+}
+
+async function buildPriceWeighted(supabase, symbols,
+                                  startDate="2023-12-26",
+                                  endDate="2024-12-24") {
+  if (!symbols.length) return { dates: [], values: [] };
+  const { data, error } = await supabase
+    .from("daily_prices")
+    .select("trade_date, symbol, close")
+    .in("symbol", symbols)
+    .gte("trade_date", startDate)
+    .lte("trade_date", endDate)
+    .order("trade_date", { ascending: true });
+  if (error) {
+    console.error(error);
+    return { dates: [], values: [] };
+  }
+  if (!data || !data.length) return { dates: [], values: [] };
+  const byDate = {};
+  data.forEach(r => {
+    (byDate[r.trade_date] ??= []).push(+r.close);
+  });
+  const dates = Object.keys(byDate).sort();
+  const raw = dates.map(d => byDate[d].reduce((a,b)=>a+b,0)/byDate[d].length);
+  const base = raw[0] || 1;
+  const values = raw.map(v => v/base*100);
+  return { dates, values };
+}
+
+function extractSelected() {
+  return Array.from(document.querySelectorAll(".checkbox-selection:checked"))
+    .map(cb => cb.closest("label")?.querySelector(".font-semibold")?.textContent.trim())
+    .filter(Boolean);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("run-backtest");
+  if (!btn) return;
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const symbols = extractSelected();
+    if (!symbols.length) { alert("Select at least one component."); return; }
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = "Running…";
+    const supabase = await getSupabase();
+    const { dates, values } = await buildPriceWeighted(supabase, symbols);
+    btn.disabled = false;
+    btn.textContent = orig;
+    if (!dates.length) { alert("No price data fetched."); return; }
+    localStorage.setItem("customDates", JSON.stringify(dates));
+    localStorage.setItem("customIndexValues", JSON.stringify(values));
+// ---------- DEBUG START ----------
+console.log("⏳  Price-Weighted Index");
+console.log("Symbols:", symbols.join(", "));
+console.log("Points:", values.length);
+console.table(
+  values.slice(0, 5).map((v, i) => ({ date: dates[i], value: v }))
+);
+// badge in UI
+const seriesTitle = document.querySelector('div.text-sm.font-medium[data-en="Series"]');
+if (seriesTitle) {
+  let badge = document.getElementById("ci-badge");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.id = "ci-badge";
+    badge.className = "ml-2 text-xs text-gray-500";
+    seriesTitle.appendChild(badge);
+  }
+  badge.textContent = `⚙ CI: ${values.length} pts`;
+}
+// ---------- DEBUG END ----------
+
+    const next = document.getElementById("next-step");
+    if (next) next.click();
+  });
+});
+</script>
+</div></section><footer class="bg-[#0D1424] text-gray-400 py-12">
+<div class="container mx-auto px-6">
+<div class="grid md:grid-cols-4 gap-8">
+<div>
+<div class="flex items-center gap-3 mb-4">
+<img alt="IndexForge Logo" class="max-w-full max-h-8 h-auto" src="/logo_192x192.png"/>
+<span class="text-2xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span>
+</div>
+<p class="text-sm" data-en="Building the future of index management technology." data-fr="Construire l’avenir de la technologie de gestion d’indices.">Building the future of index management technology.</p>
+</div>
+<div>
+<h4 class="text-white font-medium mb-4" data-en="Product" data-fr="Produit">Product</h4>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-white" data-en="Features" data-fr="Fonctionnalités" href="#features">Features</a></li>
+<li><a class="hover:text-white" data-en="Demo" data-fr="Démo" href="#demo">Demo</a></li>
+<li><a class="hover:text-white" data-en="Pricing" data-fr="Tarification" href="#">Pricing</a></li>
+<li><a class="hover:text-white" data-en="Documentation" data-fr="Documentation" href="#">Documentation</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-medium mb-4" data-en="Company" data-fr="Entreprise">Company</h4>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-white" data-en="About Us" data-fr="À propos" href="#team">About Us</a></li>
+<li><a class="hover:text-white" data-en="Careers" data-fr="Carrières" href="#">Careers</a></li>
+<li><a class="hover:text-white" data-en="Blog" data-fr="Blog" href="#">Blog</a></li>
+<li><a class="hover:text-white" data-en="Contact" data-fr="Contact" href="#contact">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-medium mb-4" data-en="Legal" data-fr="Légal">Legal</h4>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-white" data-en="Privacy Policy" data-fr="Politique de confidentialité" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white" data-en="Terms of Service" data-fr="Conditions d’utilisation" href="#">Terms of Service</a></li>
+<li><a class="hover:text-white" data-en="Security" data-fr="Sécurité" href="#">Security</a></li>
+<li><a class="hover:text-white" data-en="Compliance" data-fr="Conformité" href="#">Compliance</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+<p class="text-sm">© 2025 IndexForge. All rights reserved.</p>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="hover:text-white" href="#"><i class="ri-linkedin-fill text-xl"></i></a>
+<a class="hover:text-white" href="#"><i class="ri-twitter-fill text-xl"></i></a>
+<a class="hover:text-white" href="#"><i class="ri-github-fill text-xl"></i></a>
+</div>
+</div>
+</div>
+<p class="text-xs text-center text-gray-500 mt-6" data-en="Not financial advice. For demonstration purposes only." data-fr="Pas un conseil financier. À des fins de démonstration uniquement.">Not financial advice. For demonstration purposes only.</p></footer><script>
+let allComponents = [];
+const selected = new Set();
+let priceMap = {};
+
+async function fetchLatestPrices(symbols) {
+  if (!symbols || symbols.length === 0) return;
+  try {
+    const { data: last, error: errDate } = await window.supabase
+      .from('daily_prices')
+      .select('trade_date')
+      .order('trade_date', { ascending: false })
+      .limit(1);
+    if (errDate) throw errDate;
+    const lastDate = last?.[0]?.trade_date;
+    if (!lastDate) return;
+
+    const { data: prices, error: errPrices } = await window.supabase
+      .from('daily_prices')
+      .select('symbol, close')
+      .eq('trade_date', lastDate)
+      .in('symbol', symbols);
+    if (errPrices) throw errPrices;
+
+    priceMap = {};
+    prices.forEach(p => priceMap[p.symbol] = Number(p.close));
+  } catch (e) {
+    console.error('Price fetch error:', e);
+  }
+}
+
+async function fetchComponents() {
+  try {
+    const { data, error } = await window.supabase
+      .from("components")
+      .select("id, symbol, name, currency, sector")
+      .order("symbol", { ascending: true });
+
+    if (error) throw error;
+
+    allComponents = data;
+    const listEl = document.getElementById("component-list");
+    if (!listEl) return;
+
+    listEl.innerHTML = "";
+    for (const c of allComponents) {
+      const option = document.createElement("option");
+      option.value = c.symbol;
+      option.innerText = `${c.symbol} - ${c.name}`;
+      listEl.appendChild(option);
+    }
+  } catch (err) {
+    console.error("Component fetch error:", err);
+  }
+}
+</script><script>
+document.addEventListener("DOMContentLoaded", function() {
+    const modelType = document.getElementById("model-type");
+    const rebalance = document.getElementById("rebalance-wrapper");
+    function toggle() {
+        if (modelType?.value === "equal-weighted") {
+            rebalance.style.display = "block";
+        } else {
+            rebalance.style.display = "none";
+        }
+    }
+    modelType?.addEventListener("change", toggle);
+    toggle();
+});
+</script><script>
+document.addEventListener("DOMContentLoaded", function() {
+    const modelType = document.getElementById("model-type");
+    const rebalance = document.getElementById("rebalance-wrapper");
+    function toggle() {
+        if (modelType?.value === "equal-weighted") {
+            rebalance.style.display = "block";
+        } else {
+            rebalance.style.display = "none";
+        }
+    }
+    modelType?.addEventListener("change", toggle);
+    toggle();
+});
+</script><script>
+document.addEventListener("DOMContentLoaded", function () {
+  const startInput = document.getElementById("start-date");
+  const endInput = document.getElementById("end-date");
+
+  if (startInput && endInput) {
+    const today = new Date();
+    let endDate = new Date(today);
+    endDate.setDate(endDate.getDate() - 1); // вчера
+
+    // отступаем, если выпал на выходной
+    while (endDate.getDay() === 0 || endDate.getDay() === 6) {
+      endDate.setDate(endDate.getDate() - 1);
+    }
+
+    const startDate = new Date(endDate);
+    startDate.setFullYear(startDate.getFullYear() - 1);
+
+    function format(d) {
+      return d.toISOString().split("T")[0]; // yyyy-mm-dd
+    }
+
+    startInput.value = format(startDate);
+    endInput.value = format(endDate);
+  }
+});
+</script><script>
+document.addEventListener("DOMContentLoaded", function () {
+  const langToggle = document.getElementById("lang-toggle");
+  const langMenu = document.getElementById("lang-menu");
+  if (langToggle && langMenu) {
+    langToggle.addEventListener("click", () => {
+      langMenu.classList.toggle("hidden");
+    });
+  }
+
+  const mobileLangToggle = document.getElementById("mobile-lang-toggle");
+  const mobileLangMenu = document.getElementById("mobile-lang-menu");
+  if (mobileLangToggle && mobileLangMenu) {
+    mobileLangToggle.addEventListener("click", () => {
+      mobileLangMenu.classList.toggle("hidden");
+    });
+  }
+});
+</script><script>
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+
+    const desktopToggle = document.getElementById("language-selector");
+    const desktopMenu = document.getElementById("language-dropdown");
+    const mobileMenu = document.getElementById("mobile-language-dropdown");
+    const currentLangSpan = document.getElementById("current-language");
+    const langButtons = document.querySelectorAll("[data-lang]");
+
+    let currentLanguage = localStorage.getItem("language");
+    if (!currentLanguage) {
+      const browserLang = navigator.language || (navigator.languages && navigator.languages[0]) || "en";
+      currentLanguage = browserLang.startsWith("fr") ? "fr" : "en";
+      console.log("🌐 Using browser language:", browserLang, "→", currentLanguage);
+      localStorage.setItem("language", currentLanguage);
+    } 
+
+    if (desktopToggle && desktopMenu) {
+      desktopToggle.addEventListener("click", () => {
+        desktopMenu.classList.toggle("hidden");
+      });
+    }
+
+    const mobileIcon = document.querySelector("header .ri-global-line");
+    if (mobileIcon && mobileMenu) {
+      mobileIcon.parentElement?.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+    }
+
+    function updateLanguageUI(lang) {
+      if (!lang) return;
+      currentLanguage = lang;
+      localStorage.setItem("language", currentLanguage);
+
+      if (currentLangSpan) currentLangSpan.textContent = currentLanguage === "en" ? "English" : "Français";
+
+      langButtons.forEach((btn) => {
+        const check = btn.querySelector(".language-check");
+        const btnLang = btn.getAttribute("data-lang");
+        if (btnLang === currentLanguage) {
+          btn.classList.add("text-green-400");
+          if (check) check.classList.remove("opacity-0");
+        } else {
+          btn.classList.remove("text-green-400");
+          if (check) check.classList.add("opacity-0");
+        }
+      });
+
+      updateLanguageText(currentLanguage);
+    }
+
+    function updateLanguageText(lang) {
+      document.querySelectorAll("[data-en]").forEach((el) => {
+        const translation = el.getAttribute("data-" + lang);
+        if (translation) el.textContent = translation;
+      });
+    }
+
+    langButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const selected = btn.getAttribute("data-lang");
+        updateLanguageUI(selected);
+        if (desktopMenu) desktopMenu.classList.add("hidden");
+        if (mobileMenu) mobileMenu.classList.add("hidden");
+      });
+    });
+
+    updateLanguageUI(currentLanguage);
+  } catch (e) {
+    console.error("❌ Language script error:", e);
+  }
+});
+</script>
+<div class="absolute hidden z-50 mt-2 w-40 bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-lg shadow-xl text-sm text-white" id="language-options">
+<button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="en">
+<span class="w-5 h-5 flex items-center justify-center"><i class="ri-check-line language-check opacity-0"></i></span>
+<span>English</span>
+</button>
+<button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="fr">
+<span class="w-5 h-5 flex items-center justify-center"><i class="ri-check-line language-check opacity-0"></i></span>
+<span>Français</span>
+</button>
+</div>
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  function positionDropdown(button) {
+    const menu = document.getElementById("language-options");
+    const rect = button.getBoundingClientRect();
+    menu.style.top = rect.bottom + window.scrollY + "px";
+    menu.style.right = window.innerWidth - rect.right + "px";
+    menu.classList.toggle("hidden");
+  }
+
+  const desktopBtn = document.getElementById("language-selector");
+  if (desktopBtn) {
+    desktopBtn.addEventListener("click", function () {
+      positionDropdown(desktopBtn);
+    });
+  }
+
+  const mobileBtn = document.getElementById("mobile-language-selector");
+  if (mobileBtn) {
+    mobileBtn.addEventListener("click", function () {
+      positionDropdown(mobileBtn);
+    });
+  }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function waitForElements(callback) {
+    const interval = setInterval(() => {
+      const steps = document.querySelectorAll('.step-content');
+      const progressSteps = document.querySelectorAll('.progress-step');
+  
+	  let runButton = document.getElementById("run-backtest");
+	  let nextButton = document.getElementById("next-step");
+	  let prevButton = document.getElementById("prev-step");
+ 
+
+      if (steps.length && progressSteps.length && runButton && nextButton && prevButton) {
+        clearInterval(interval);
+        callback({ steps, progressSteps, runButton, nextButton, prevButton });
+      }
+    }, 100);
+  }
+
+  waitForElements(({ steps, progressSteps, runButton, nextButton, prevButton }) => {
+    let currentStep = 1;
+
+    function showStep(step) {
+      steps.forEach((s, i) => {
+        s.classList.toggle('hidden', i !== step - 1);
+      });
+
+      progressSteps.forEach((p, i) => {
+        const circle = p.querySelector('.step-circle');
+        const text = p.querySelector('.progress-step-text');
+        p.classList.remove('active', 'completed');
+        circle.classList.remove('bg-primary', 'bg-green-500', 'text-white');
+        circle.classList.add('bg-gray-800', 'text-gray-400');
+        text.classList.remove('text-white');
+
+        if (i + 1 === step) {
+          p.classList.add('active');
+          circle.classList.remove('bg-gray-800', 'text-gray-400');
+          circle.classList.add('bg-primary', 'text-white');
+          text.classList.add('text-white');
+        } else if (i + 1 < step) {
+          p.classList.add('completed');
+          circle.classList.remove('bg-gray-800', 'text-gray-400');
+          circle.classList.add('bg-green-500', 'text-white');
+        }
+      });
+
+      // Update next/previous button states
+      if (prevButton) {
+        if (step === 1) {
+          prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+          prevButton.disabled = true;
+        } else {
+          prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
+          prevButton.disabled = false;
+        }
+      }
+
+      if (nextButton) {
+        if (step === steps.length) {
+          nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+          nextButton.disabled = true;
+        } else {
+          nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+          nextButton.disabled = false;
+        }
+      }
+    }
+
+    nextButton.addEventListener('click', () => {
+      if (currentStep < steps.length) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    });
+
+    prevButton.addEventListener('click', () => {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    runButton.addEventListener('click', () => {
+      currentStep = 2;
+      showStep(currentStep);
+    });
+
+    showStep(currentStep);
+  });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdown = document.getElementById("language-dropdown");
+  const mobileDropdown = document.getElementById("mobile-language-dropdown");
+  const buttons = document.querySelectorAll('[data-lang]');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      dropdown?.classList.add("hidden");
+      mobileDropdown?.classList.add("hidden");
+    });
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const dropdown = document.getElementById('language-options');
+  const currentLanguageText = document.getElementById('current-language');
+  const languageButtons = document.querySelectorAll('[data-lang]');
+  const languageIcons = document.querySelectorAll('.language-check');
+
+  function setLanguage(lang) {
+    localStorage.setItem('lang', lang);
+    updateLanguage(lang);
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+    }
+  }
+
+  function updateLanguage(lang) {
+    document.querySelectorAll('[data-en]').forEach(el => {
+      el.textContent = lang === 'fr' ? el.dataset.fr : el.dataset.en;
+    });
+    document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+      el.setAttribute("placeholder", lang === 'fr' ? el.dataset.frPlaceholder : el.dataset.enPlaceholder);
+    });
+
+    languageButtons.forEach(button => {
+      const isActive = button.dataset.lang === lang;
+      const icon = button.querySelector('.language-check');
+      if (icon) {
+        icon.classList.remove('opacity-100', 'opacity-0');
+        icon.classList.add(isActive ? 'opacity-100' : 'opacity-0');
+      }
+    });
+
+    if (currentLanguageText) {
+      currentLanguageText.textContent = lang === 'fr' ? 'Français' : 'English';
+    }
+  }
+
+  const storedLang = localStorage.getItem('lang') || 'en';
+  updateLanguage(storedLang);
+
+  languageButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const lang = button.dataset.lang;
+      if (lang) setLanguage(lang);
+    });
+  });
+});
+</script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabase = createClient(
+  'https://ftyfslzxtqalylwekjcv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0eWZzbHp4dHFhbHlsd2VramN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1OTU0NDEsImV4cCI6MjA2NTE3MTQ0MX0.7UNbOoclq4s-3M1o95-c3pmie0S5eRpXdPf1f755gbE'
+);
+
+function getDateRange() {
+  const start = document.getElementById("start-date")?.value;
+  const end = document.getElementById("end-date")?.value;
+  return [start, end];
+}
+
+async function fetchSP500(startDate, endDate) {
+  console.log("[ChartJS] Fetching S&P 500 data...");
+  const { data, error } = await supabase
+    .from("daily_prices")
+    .select("trade_date, close")
+    .eq("symbol", "^GSPC")
+    .gte("trade_date", startDate)
+    .lte("trade_date", endDate)
+    .order("trade_date", { ascending: true });
+
+  if (error) {
+    console.error("[ChartJS] Supabase error:", error);
+    return { dates: [], values: [] };
+  }
+
+  return {
+    dates: data.map(r => r.trade_date),
+    values: data.map(r => +r.close)
+  };
+}
+
+async function initializeChart() {
+  console.log("[ChartJS] Initializing chart...");
+
+  const [startDate, endDate] = getDateRange();
+  console.log("[ChartJS] Date range:", startDate, "to", endDate);
+
+  const { dates, values } = await fetchSP500(startDate, endDate);
+  console.log("[ChartJS] Fetched", dates.length, "dates and", values.length, "values");
+
+  rawData.dates = dates;
+  rawData.sp500 = values;
+  rawData.custom = Array(dates.length).fill(0);
+  console.log("[ChartJS] rawData prepared:", rawData);
+
+  const container = document.getElementById("performance-chart");
+  if (!container) {
+    console.error("[ChartJS] ⚠️ #performance-chart container not found!");
+    return;
+  }
+
+  // Очистить контейнер от предыдущего canvas
+  container.innerHTML = "";
+
+  const canvas = document.createElement("canvas");
+  canvas.width = container.offsetWidth;
+  canvas.height = container.offsetHeight;
+  container.appendChild(canvas);
+
+  const ctx = canvas.getContext("2d");
+
+  const datasets = transformData(rawData, valueMode);
+
+  const chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: rawData.dates,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: "#f8fafc" }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.dataset.label || "";
+              const value = context.parsed.y;
+              return window.valueMode === "return" ? `${label}: ${value.toFixed(2)}%` : `${label}: ${value.toFixed(2)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            callback: function(val) {
+              const label = this.getLabelForValue(val);
+              return label.slice(5); // MM-DD
+            },
+            color: "#94a3b8"
+          },
+          grid: { color: "#334155" }
+        },
+        y: {
+          ticks: {
+            color: "#94a3b8",
+            callback: function(value) {
+              return window.valueMode === "return" ? value + "%" : value;
+            }
+          },
+          grid: { color: "#1e293b" }
+        }
+      }
+    }
+  });
+
+  window.chart = chart;
+}
+
+window.addEventListener("DOMContentLoaded", initializeChart);
+window.addEventListener("resize", () => window.chart?.resize());
+</script><script>
+window.addEventListener("DOMContentLoaded", () => {
+  const seriesControls = {
+    "show-custom-index": 0,
+    "show-sp500": 1
+  };
+
+  for (const [id, datasetIndex] of Object.entries(seriesControls)) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("change", () => {
+        if (window.chart) {
+          window.chart.setDatasetVisibility(datasetIndex, el.checked);
+          window.chart.update();
+        }
+      });
+    }
+  }
+});
+</script><script>
+window.addEventListener("DOMContentLoaded", () => {
+  const toggles = [
+    { inputId: "show-custom-index", indicatorId: "show-custom-index-indicator" },
+    { inputId: "show-sp500", indicatorId: "show-sp500-indicator" }
+  ];
+
+  toggles.forEach(({ inputId, indicatorId }) => {
+    const input = document.getElementById(inputId);
+    const indicator = document.getElementById(indicatorId);
+
+    function updateIndicator() {
+      if (input.checked) {
+        indicator.classList.remove("hidden");
+        indicator.classList.add("block");
+      } else {
+        indicator.classList.remove("block");
+        indicator.classList.add("hidden");
+      }
+    }
+
+    input.addEventListener("change", updateIndicator);
+    updateIndicator(); // set initial state
+  });
+});
+</script><script>
+window.valueMode = "absolute";
+let rawData = {
+  sp500: [], custom: [], dates: []
+};
+
+function getActiveSeries() {
+  return {
+    sp500: document.getElementById("show-sp500").checked,
+    custom: document.getElementById("show-custom-index").checked
+  };
+}
+
+function transformSeries(data, mode) {
+  if (!data || data.length === 0) return null;
+  const base = data[0];
+
+  switch (mode) {
+    case "normalize":
+      return base === 0 ? data.map(() => 100) : data.map(v => (v / base) * 100);
+    case "return":
+      return base === 0 ? data.map(() => 0) : data.map(v => ((v / base) - 1) * 100);
+    case "absolute":
+    default:
+      return [...data];
+  }
+}
+
+
+function transformData(rawData, valueMode) {
+  const active = getActiveSeries();
+  const datasets = [];
+
+  if (active.sp500) {
+    const values = transformSeries(rawData.sp500, valueMode);
+    if (values) {
+      datasets.push({
+        label: "S&P 500",
+        data: values,
+        borderColor: "rgba(141, 211, 199, 1)",
+        tension: 0.25
+      });
+    }
+  }
+
+  if (active.custom) {
+    const values = transformSeries(rawData.custom, valueMode);
+    if (values) {
+      datasets.push({
+        label: "Custom Index",
+        data: values,
+        borderColor: "rgba(87, 181, 231, 1)",
+        tension: 0.25
+      });
+    }
+  }
+
+  return datasets;
+}
+
+function updateChart() {
+  console.log('rawData', rawData);
+  const datasets = transformData(rawData, valueMode);
+  if (window.chart && datasets) {
+    chart.data.labels = rawData.dates;
+    console.log('chart.data.labels', rawData.dates);
+    console.log('chart.data.datasets', datasets);
+    chart.data.datasets = datasets;
+    chart.update();
+  }
+}
+
+function updateToggleUI(groupId, selectedValue, attribute) {
+  document.querySelectorAll(`#${groupId} button`).forEach(btn => {
+    if (btn.dataset[attribute] === selectedValue) {
+      btn.classList.add("bg-blue-500");
+      btn.classList.remove("bg-slate-700");
+    } else {
+      btn.classList.add("bg-slate-700");
+      btn.classList.remove("bg-blue-500");
+    }
+  });
+}
+
+function setValueMode(mode) {
+  valueMode = mode;
+  updateToggleUI("value-mode-toggle", valueMode, "mode");
+  updateChart();
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  console.log("initial rawData loaded", rawData);
+  updateToggleUI("value-mode-toggle", valueMode, "mode");
+
+  document.querySelectorAll("#value-mode-toggle button").forEach(btn => {
+    btn.addEventListener("click", () => setValueMode(btn.dataset.mode));
+  });
+
+  document.getElementById("show-sp500").addEventListener("change", updateChart);
+  document.getElementById("show-custom-index").addEventListener("change", updateChart);
+});
+</script></body></html>
