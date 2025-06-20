@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IndexForge - Build Financial Indices Without Code</title>
+<link href="/logo_192x192.png" rel="icon" type="image/png"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#1e40af'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;family=Pacifico&amp;display=swap" rel="stylesheet"/>
+<style>
+h1 {
+font-family: 'Inter', sans-serif;
+}
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+background-color: #0f172a;
+color: #f8fafc;
+}
+h1, h2, h3, h4, .font-heading {
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+letter-spacing: -0.02em;
+}
+.text-gradient {
+background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #1D4ED8 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+input[type="number"] {
+-moz-appearance: textfield;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 40px;
+height: 22px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #334155;
+transition: .4s;
+border-radius: 22px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 16px;
+width: 16px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #3b82f6;
+}
+input:checked + .slider:before {
+transform: translateX(18px);
+}
+.toggle-btn {
+background-color: #1e293b;
+color: #94a3b8;
+transition: all 0.3s;
+}
+.toggle-btn.active {
+background-color: #3b82f6;
+color: white;
+}
+.progress-bar {
+position: relative;
+display: flex;
+justify-content: space-between;
+counter-reset: step;
+margin-bottom: 30px;
+}
+.progress-bar::before {
+content: "";
+position: absolute;
+top: 15px;
+left: 0;
+height: 2px;
+width: 100%;
+background-color: #334155;
+z-index: 0;
+}
+.progress-step {
+position: relative;
+z-index: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.step-circle {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+background-color: #1e293b;
+color: #94a3b8;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+margin-bottom: 8px;
+}
+.progress-step.active .step-circle {
+background-color: #3b82f6;
+color: white;
+box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+.progress-step.completed .step-circle {
+background-color: #10b981;
+color: white;
+}
+.progress-step-text {
+font-size: 0.875rem;
+color: #94a3b8;
+}
+.progress-step.active .progress-step-text {
+color: white;
+}
+.glow-effect {
+box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+.custom-scrollbar::-webkit-scrollbar {
+width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #1e293b;
+border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #3b82f6;
+border-radius: 10px;
+}
+</style>
+<!-- Color Refresh: clearer, higher‑contrast palette -->
+<style id="color-refresh">
+  /* Brand & background */
+  body               { background-color:#0e1627; color:#f1f5f9; }
+  .bg-gray-900       { background-color:#0e1627 !important; }
+  .bg-gray-800       { background-color:#1e293b !important; }
+  .bg-gray-800\/90  { background-color:rgba(30,41,59,0.95) !important; }
+  .bg-gray-800\/50  { background-color:rgba(30,41,59,0.85) !important; }
+  .bg-gray-700       { background-color:#334155 !important; }
+  .text-gray-100     { color:#f8fafc !important; }
+  .text-gray-400     { color:#cbd5e1 !important; }
+  .border-gray-800   { border-color:#1e293b !important; }
+  .border-gray-700   { border-color:#334155 !important; }
+</style>
+</head>
+<header class="bg-[url('https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/0e290a13f2dafb56bfb369f7e3d4d239.png')] bg-cover bg-center fixed w-full z-50 border-b border-blue-900/30">
+<nav class="container mx-auto px-6 py-2">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-4 hover:opacity-90 transition-opacity scroll-smooth" href="#"><img alt="IndexForge Logo" class="w-auto max-h-8 h-auto" src="/logo_192x192.png"/><span class="text-xl font-['Inter'] font-bold bg-[linear-gradient(120deg,#E0F4FF,#87CEEB)] bg-clip-text text-transparent [text-shadow:0_0_20px_rgba(135,206,235,0.3)]">IndexForge</span></a>
+
+</div>
+<div class="hidden md:flex items-center space-x-4">
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="text-gray-100 hover:text-white px-4 py-2 hover:bg-white/10 rounded transition-all scroll-smooth" data-en="Contact" data-fr="Contact" href="#contact">Contact</a><a class="bg-primary text-white hover:bg-primary/90 px-4 py-2 rounded-md transition-colors duration-200 scroll-smooth" data-en="Demo" data-fr="Démo" href="/demo">Demo</a>
+
+<div class="relative">
+<button class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-gray-800/50 hover:bg-gray-700/50 text-gray-100 rounded" id="language-selector">
+<i class="ri-global-line"></i>
+<span id="current-language">English</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+<div class="hidden absolute right-0 mt-2 py-2 w-40 bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-lg shadow-xl" id="language-dropdown">
+<button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="en">
+<span class="w-5 h-5 flex items-center justify-center"><i class="ri-check-line language-check opacity-0"></i></span>
+<span>English</span>
+</button>
+<button class="w-full px-4 py-2 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="fr">
+<span class="w-5 h-5 flex items-center justify-center"><i class="ri-check-line language-check opacity-0"></i></span>
+<span>Français</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 md:hidden">
+<div class="relative">
+<button class="flex items-center gap-1 px-2 py-1 text-sm font-medium bg-gray-800/50 hover:bg-gray-700/50 text-gray-100 rounded" id="mobile-language-selector">
+<i class="ri-global-line"></i>
+</button>
+<div class="hidden absolute right-0 mt-2 py-2 w-32 bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-lg shadow-xl z-50" id="mobile-language-dropdown">
+<button class="w-full px-3 py-1.5 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="en">
+<i class="ri-check-line language-check opacity-0 w-4"></i> English
+      </button>
+<button class="w-full px-3 py-1.5 text-left text-sm hover:bg-gray-700/50 text-gray-100 flex items-center gap-2" data-lang="fr">
+<i class="ri-check-line language-check opacity-0 w-4"></i> Français
+      </button>
+</div>
+</div>
+<button class="text-gray-600" id="mobile-menu-button">
+<i class="ri-menu-line text-2xl"></i>
+</button>
+</div>
+</div>
+<div class="md:hidden hidden" id="mobile-menu">
+<div class="py-4 space-y-4">
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="Home" data-fr="Accueil" href="#">Home</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="About" data-fr="À propos" href="#team">About</a>
+<a class="block text-gray-100 hover:text-white scroll-smooth text-right pr-4" data-en="Contact" data-fr="Contact" href="#contact">Contact</a>
+</div>
+</div>
+</nav>
+</header>
+<section class="py-20 bg-[#0D1424]" id="team">
+<div class="container mx-auto px-6">
+<div class="grid lg:grid-cols-2 gap-16 items-start">
+<div class="space-y-6">
+<div>
+<h2 class="text-3xl font-bold text-white mb-4 font-heading" data-en="About IndexForge" data-fr="À propos d’IndexForge">About IndexForge</h2>
+<p class="text-lg text-blue-100/80" data-en="IndexForge empowers financial professionals to design and launch custom indices without coding or infrastructure overhead. What once took months can now be done in minutes." data-fr="IndexForge permet aux professionnels de la finance de concevoir et lancer des indices personnalisés sans codage ni infrastructure.">IndexForge empowers financial professionals to design and launch custom indices without coding or infrastructure overhead. What once took months can now be done in minutes.</p>
+</div>
+<div class="bg-blue-900/20 border border-blue-900/30 rounded-lg p-4">
+<p class="text-blue-100/90 italic text-base" data-en="IndexForge is now being incubated in France and aspires to become part of the French FinTech ecosystem." data-fr="IndexForge est actuellement incubé en France et aspire à rejoindre l’écosystème FinTech français.">IndexForge is now being incubated in France and aspires to become part of the French FinTech ecosystem.</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-tools-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Intuitive Design Tools" data-fr="Outils de conception intuitifs">Intuitive Design Tools</h3>
+<p class="text-blue-100/80" data-en="Intuitive index design tools that require no programming knowledge" data-fr="Des outils de conception d’indices intuitifs ne nécessitant aucune connaissance en programmation">Intuitive index design tools that require no programming knowledge</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-line-chart-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Real-time Integration" data-fr="Intégration en temps réel">Real-time Integration</h3>
+<p class="text-blue-100/80" data-en="Real-time data integration from leading financial data providers" data-fr="Intégration de données en temps réel provenant des principaux fournisseurs de données financières">Real-time data integration from leading financial data providers</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-calculator-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Automated Calculation" data-fr="Calcul automatisé">Automated Calculation</h3>
+<p class="text-blue-100/80" data-en="Automated calculation engines with institutional-grade accuracy" data-fr="Moteurs de calcul automatisés avec une précision de niveau institutionnel">Automated calculation engines with institutional-grade accuracy</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-lg bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<i class="ri-shield-check-line text-blue-400"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-white mb-1" data-en="Comprehensive Compliance" data-fr="Conformité complète">Comprehensive Compliance</h3>
+<p class="text-blue-100/80" data-en="Comprehensive compliance and regulatory reporting tools" data-fr="Outils complets de conformité et de reporting réglementaire">Comprehensive compliance and regulatory reporting tools</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-3xl font-bold text-white mb-8 font-heading" data-en="Meet Our Team" data-fr="Rencontrez notre équipe">Meet Our Team</h2>
+<div class="grid gap-8">
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30">
+<div class="flex items-start gap-6 flex-col sm:flex-row">
+<img alt="Michael Reynaud" class="w-40 h-40 object-cover rounded-lg max-w-full h-auto mb-4 sm:mb-0 sm:mr-6" src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/ca15a7aee49a0a4e6ae6b981f008d20b.png"/>
+<div>
+<h3 class="text-xl font-semibold text-white mb-2">Michael Reynaud</h3>
+<p class="text-blue-400 mb-3">CEO &amp; Founder</p>
+<p class="text-blue-100/80" data-en="Former quantitative analyst with 15 years of experience in index development at major financial institutions." data-fr="Ancien analyste quantitatif avec 15 ans d’expérience dans le développement d’indices pour de grandes institutions financières.">Former quantitative analyst with 15 years of experience in index development at major financial institutions.</p>
+</div>
+</div>
+</div>
+<div class="bg-[#1A1F3C] rounded-xl p-6 border border-blue-900/30">
+<div class="flex items-start gap-6 flex-col sm:flex-row">
+<img alt="Thomas Laurent" class="w-40 h-40 object-cover rounded-lg max-w-full h-auto mb-4 sm:mb-0 sm:mr-6" src="https://static.readdy.ai/image/138f22226b13515669693e424a3b6751/ca15a7aee49a0a4e6ae6b981f008d20b.png"/>
+<div>
+<h3 class="text-xl font-semibold text-white mb-2">Thomas Laurent</h3>
+<p class="text-blue-400 mb-3">CTO &amp; Co-founder</p>
+<p class="text-blue-100/80" data-en="Tech innovator with expertise in financial data systems and machine learning applications in finance." data-fr="Innovateur technologique spécialisé dans les systèmes de données financières et l’IA appliquée à la finance.">Tech innovator with expertise in financial data systems and machine learning applications in finance.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<script id="mobile-menu">
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    // Close when clicking link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+  }
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+});
+</script>
+
+
+<script id="language-controller">
+document.addEventListener('DOMContentLoaded', () => {
+  const KEY = 'siteLang';
+  const FALLBACK = 'en';
+  const languages = { en: 'English', fr: 'Français' };
+
+  const saved = localStorage.getItem(KEY);
+  const browserLang = (navigator.language || 'en').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  let lang = saved || browserLang || FALLBACK;
+
+  const curSpan = document.getElementById('current-language');
+  const syncTexts = () => {
+    document.querySelectorAll('[data-en], [data-fr]').forEach(el => {
+      const txt = el.getAttribute('data-' + lang);
+      if (txt) el.textContent = txt;
+    });
+    document.querySelectorAll('[data-en-placeholder], [data-fr-placeholder]').forEach(el => {
+      const ph = el.getAttribute('data-' + lang + '-placeholder');
+      if (ph) el.placeholder = ph;
+    });
+    if (curSpan) curSpan.textContent = languages[lang] || lang;
+    document.querySelectorAll('.language-check').forEach(i => i.classList.add('opacity-0'));
+    document.querySelectorAll('[data-lang="' + lang + '"] .language-check').forEach(i => i.classList.remove('opacity-0'));
+  };
+
+  const setLang = (l) => { lang = l; localStorage.setItem(KEY, lang); syncTexts(); };
+
+  const wireDropdown = (btnId, dropId) => {
+    const btn = document.getElementById(btnId);
+    const drop = document.getElementById(dropId);
+    if (!btn || !drop) return;
+    btn.addEventListener('click', () => drop.classList.toggle('hidden'));
+    drop.querySelectorAll('[data-lang]').forEach(b => {
+      b.addEventListener('click', () => { setLang(b.getAttribute('data-lang')); drop.classList.add('hidden'); });
+    });
+  };
+  wireDropdown('language-selector','language-dropdown');
+  wireDropdown('mobile-language-selector','mobile-language-dropdown');
+
+  document.addEventListener('click', e => {
+    ['language-dropdown','mobile-language-dropdown'].forEach(id => {
+      const d = document.getElementById(id);
+      const b = id === 'language-dropdown' ? document.getElementById('language-selector') : document.getElementById('mobile-language-selector');
+      if (d && !d.classList.contains('hidden') && !b.contains(e.target) && !d.contains(e.target)) {
+        d.classList.add('hidden');
+      }
+    });
+  });
+
+  syncTexts();
+});
+</script>
+
+</body></html>
