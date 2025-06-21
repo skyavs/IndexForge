@@ -578,122 +578,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-
 </script>
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const userLang = navigator.language || navigator.userLanguage;
-    const lang = userLang.startsWith('fr') ? 'fr' : 'en';
-
-    const dropdown = document.getElementById('language-dropdown');
-    const currentLangSpan = document.getElementById('current-language');
-    const langButtons = dropdown ? dropdown.querySelectorAll('button[data-lang]') : [];
-
-    if (currentLangSpan) {
-        currentLangSpan.textContent = lang === 'fr' ? 'Français' : 'English';
-    }
-
-    langButtons.forEach(btn => {
-        const isActive = btn.getAttribute('data-lang') === lang;
-        const checkIcon = btn.querySelector('.language-check');
-        if (checkIcon) checkIcon.classList.toggle('opacity-0', !isActive);
-    });
-
-    // Trigger UI language change
-    document.querySelectorAll('[data-en], [data-fr]').forEach(el => {
-        const fr = el.getAttribute('data-fr');
-        const en = el.getAttribute('data-en');
-        if (lang === 'fr' && fr) {
-            el.textContent = fr;
-        } else if (lang === 'en' && en) {
-            el.textContent = en;
-        }
-    });
-
-    document.querySelectorAll('[data-fr-placeholder], [data-en-placeholder]').forEach(el => {
-        const fr = el.getAttribute('data-fr-placeholder');
-        const en = el.getAttribute('data-en-placeholder');
-        if (lang === 'fr' && fr) {
-            el.setAttribute('placeholder', fr);
-        } else if (lang === 'en' && en) {
-            el.setAttribute('placeholder', en);
-        }
-    });
-});
-</script>
-<script>
-  document.getElementById('mobile-language-selector').addEventListener('click', function () {
-    document.getElementById('mobile-language-dropdown').classList.toggle('hidden');
-  });
-</script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  function setLanguage(lang) {document.querySelectorAll('[data-en]').forEach(el => {
-      if (el.dataset[lang]) {el.textContent = el.dataset[lang];
-      }
-    });
-    document.querySelectorAll('[data-en-placeholder]').forEach(el => {
-      const placeholder = el.dataset[lang + 'Placeholder'];
-      if (placeholder) {el.placeholder = placeholder;
-      }
-    });
-    const current = document.getElementById('current-language');
-    if (current) {
-      current.textContent = lang === 'en' ? 'English' : 'Français';}
-    document.querySelectorAll('.language-check').forEach(i => i.classList.add('opacity-0'));
-    document.querySelectorAll('[data-lang="' + lang + '"] .language-check').forEach(i => i.classList.remove('opacity-0'));
-  }
-
-  // Desktop dropdown toggle logic (robust)
-  const desktopSelector = document.getElementById('language-selector');
-  const desktopDropdown = document.getElementById('language-dropdown');
-  if (desktopSelector && desktopDropdown) {
-    desktopSelector.addEventListener('click', () => {
-      const isVisible = desktopDropdown.style.display === 'block';
-      if (!isVisible) {
-        desktopDropdown.classList.remove('hidden');
-        desktopDropdown.style.display = 'block';} else {
-        desktopDropdown.classList.add('hidden');
-        desktopDropdown.style.display = 'none';}
-    });
-  }
-
-  document.querySelectorAll('#language-dropdown button').forEach(button => {
-    button.addEventListener('click', () => {
-      const lang = button.dataset.lang;setLanguage(lang);
-      desktopDropdown.classList.add('hidden');
-      desktopDropdown.style.display = 'none';
-    });
-  });
-
-  // Mobile dropdown logic (already fixed)
-  document.querySelectorAll('#mobile-language-dropdown button').forEach(button => {
-    button.addEventListener('click', () => {
-      const lang = button.dataset.lang;setLanguage(lang);
-      const dropdown = document.getElementById('mobile-language-dropdown');
-      dropdown.classList.add('hidden');
-      dropdown.style.display = 'none';
-    });
-  });
-
-  const mobileSelector = document.getElementById('mobile-language-selector');
-  if (mobileSelector) {
-    mobileSelector.addEventListener('click', () => {
-      const dropdown = document.getElementById('mobile-language-dropdown');
-      const isVisible = dropdown.style.display === 'block';
-      if (!isVisible) {
-        dropdown.classList.remove('hidden');
-        dropdown.style.display = 'block';} else {
-        dropdown.classList.add('hidden');
-        dropdown.style.display = 'none';}
-    });
-  }setLanguage('en');
-});
-</script>
-
 
 <script id="language-controller">
 document.addEventListener('DOMContentLoaded', () => {
@@ -762,7 +647,6 @@ document.addEventListener('DOMContentLoaded', () => {
   apply(lang);
 });
 </script>
-
 
 </body>
 </html>
